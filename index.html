@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Agri Maroc Précis - المنصة المتكاملة للفلاحة الذكية</title>
     
     <!-- Leaflet للخريطة -->
@@ -1038,17 +1038,461 @@
             100% { opacity: 0; transform: translateX(50px); display: none; }
         }
         
-        @media (max-width: 600px) {
-            .chat-window { width: calc(100% - 40px); right: 20px; left: 20px; bottom: 90px; height: 500px; }
-            .chat-button { width: 55px; height: 55px; bottom: 20px; right: 20px; }
-            .welcome-toast { bottom: 90px; right: 20px; }
-            .modal-content, .ndvi-map-content { width: 95%; padding: 20px; }
-            .ndvi-map-content { height: 450px; }
+        /* =========================================== */
+        /* ===== تحسينات الهواتف المحمولة (Responsive) ===== */
+        /* =========================================== */
+        
+        /* شاشات أقل من 768px (التابلت والهواتف) */
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+            
+            /* الهيدر */
+            .header {
+                padding: 15px 20px;
+                border-radius: 25px;
+            }
+            
+            .logo-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 22px;
+            }
+            
+            .logo-text h1 {
+                font-size: 20px;
+            }
+            
+            .logo-text p {
+                font-size: 11px;
+            }
+            
+            .badge {
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+            
+            .control-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+            
+            /* شريط التنبيهات */
+            .alert-ticker {
+                padding: 8px 12px;
+                font-size: 12px;
+                border-radius: 40px;
+            }
+            
+            .ticker-content {
+                font-size: 11px;
+            }
+            
+            /* الإحصائيات */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .stat-card {
+                padding: 12px 8px;
+            }
+            
+            .stat-icon {
+                font-size: 24px;
+            }
+            
+            .stat-value {
+                font-size: 20px;
+            }
+            
+            .stat-label {
+                font-size: 11px;
+            }
+            
+            .stat-status {
+                font-size: 9px;
+                padding: 3px 8px;
+            }
+            
+            /* الخريطة */
+            #map {
+                height: 350px;
+                border-radius: 15px;
+                margin: 15px 0;
+            }
+            
+            /* زر الإبلاغ */
+            .report-trigger-btn {
+                padding: 12px 20px;
+                font-size: 14px;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            /* معلومات المناطق */
+            .region-panel {
+                padding: 15px;
+                margin: 15px 0;
+            }
+            
+            .panel-title {
+                font-size: 16px;
+            }
+            
+            .legend {
+                gap: 12px;
+            }
+            
+            .legend-item {
+                font-size: 11px;
+            }
+            
+            .legend-color {
+                width: 14px;
+                height: 14px;
+            }
+            
+            .region-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .region-item {
+                padding: 12px;
+            }
+            
+            .region-name {
+                font-size: 15px;
+            }
+            
+            .weather-info {
+                gap: 8px;
+                padding: 8px;
+            }
+            
+            .weather-value {
+                font-size: 13px;
+            }
+            
+            .disease-tag {
+                font-size: 10px;
+                padding: 2px 8px;
+            }
+            
+            /* بيانات المناخ */
+            .weather-panel {
+                padding: 15px;
+                margin: 15px 0;
+            }
+            
+            .weather-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            
+            .weather-card {
+                padding: 12px;
+            }
+            
+            .weather-icon {
+                font-size: 28px;
+            }
+            
+            .weather-big {
+                font-size: 22px;
+            }
+            
+            .weather-label {
+                font-size: 11px;
+            }
+            
+            /* قسم الأقمار الصناعية */
+            .satellite-panel {
+                padding: 15px;
+                margin: 15px 0;
+            }
+            
+            .satellite-header h3 {
+                font-size: 1.2rem;
+            }
+            
+            .ndvi-location-btn {
+                padding: 8px 16px;
+                font-size: 12px;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .selected-area-info {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+            
+            .selected-area-info code {
+                font-size: 10px;
+                word-break: break-all;
+                display: inline-block;
+                max-width: 100%;
+            }
+            
+            .btn-small {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+            
+            .satellite-form {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .form-group label {
+                font-size: 12px;
+            }
+            
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 10px;
+                font-size: 13px;
+            }
+            
+            .btn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+            
+            /* دليل الألوان */
+            .ndvi-legend-panel {
+                padding: 15px;
+                margin-top: 20px;
+            }
+            
+            .legend-title {
+                font-size: 14px;
+            }
+            
+            .legend-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .legend-item-card {
+                padding: 10px;
+                gap: 10px;
+            }
+            
+            .legend-color-card {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .legend-info-card h4 {
+                font-size: 13px;
+            }
+            
+            .legend-info-card p {
+                font-size: 11px;
+            }
+            
+            .legend-value {
+                font-size: 10px;
+                padding: 2px 6px;
+            }
+            
+            /* الرسوم البيانية */
+            .charts-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .chart-card {
+                padding: 12px;
+            }
+            
+            .chart-header h3 {
+                font-size: 14px;
+            }
+            
+            /* الفوتر */
+            .footer {
+                padding: 20px;
+                margin-top: 20px;
+            }
+            
+            .footer-info {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .footer-item h4 {
+                font-size: 12px;
+            }
+            
+            .footer-item p {
+                font-size: 10px;
+            }
+            
+            .last-update {
+                font-size: 10px;
+            }
+            
+            /* النوافذ المنبثقة */
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+                max-height: 90vh;
+            }
+            
+            .modal-header h3 {
+                font-size: 1.2rem;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .btn-submit {
+                padding: 12px;
+                font-size: 14px;
+            }
+            
+            /* خريطة NDVI المنبثقة */
+            .ndvi-map-content {
+                width: 95%;
+                height: 65vh;
+            }
+            
+            .ndvi-map-header h4 {
+                font-size: 13px;
+            }
+            
+            .ndvi-map-footer {
+                padding: 10px;
+                gap: 10px;
+            }
+            
+            .btn-confirm, .btn-cancel {
+                padding: 8px 20px;
+                font-size: 13px;
+            }
+            
+            /* بوت الدردشة */
+            .chat-button {
+                width: 50px;
+                height: 50px;
+                bottom: 15px;
+                right: 15px;
+            }
+            
+            .chat-button i {
+                font-size: 24px;
+            }
+            
+            .chat-window {
+                width: calc(100% - 30px);
+                right: 15px;
+                left: 15px;
+                bottom: 75px;
+                height: 65vh;
+            }
+            
+            .welcome-toast {
+                bottom: 85px;
+                right: 20px;
+                padding: 8px 15px;
+                font-size: 12px;
+            }
+            
+            .welcome-toast i {
+                font-size: 18px;
+            }
         }
         
-        @media (max-width: 768px) {
-            .header-content { flex-direction: column; text-align: center; }
-            .region-grid, .charts-grid, .satellite-form { grid-template-columns: 1fr; }
+        /* شاشات أقل من 480px (هواتف صغيرة) */
+        @media (max-width: 480px) {
+            body {
+                padding: 8px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .weather-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .selected-area-info {
+                flex-direction: column;
+            }
+            
+            .satellite-form {
+                gap: 10px;
+            }
+            
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                font-size: 12px;
+            }
+            
+            .btn {
+                font-size: 13px;
+            }
+            
+            .ndvi-map-content {
+                height: 60vh;
+            }
+            
+            .chat-window {
+                height: 60vh;
+            }
+        }
+        
+        /* تحسينات للشاشات الأفقية (Landscape) على الهواتف */
+        @media (max-width: 768px) and (orientation: landscape) {
+            #map {
+                height: 250px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .modal-content {
+                max-height: 85vh;
+            }
+            
+            .ndvi-map-content {
+                height: 70vh;
+            }
+        }
+        
+        /* تحسينات للأجهزة التي تعمل باللمس */
+        @media (hover: none) and (pointer: coarse) {
+            button, 
+            .control-btn,
+            .report-trigger-btn,
+            .ndvi-location-btn,
+            .btn,
+            .btn-small,
+            .btn-confirm,
+            .btn-cancel {
+                min-height: 44px;
+            }
+            
+            .region-item {
+                cursor: pointer;
+            }
         }
     </style>
 </head>
