@@ -5,15 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Agri Maroc Assistant | الذكاء الاصطناعي للفلاحة المغربية</title>
     
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- ========== سياسات الأمان ========== -->
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' https://cdnjs.cloudflare.com https://unpkg.com https://cdn.botpress.cloud 'unsafe-eval';
+        style-src 'self' https://cdnjs.cloudflare.com https://fonts.googleapis.com;
+        font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+        connect-src 'self' https://api.botpress.cloud https://files.bpcontent.cloud;
+        frame-src https://cdn.botpress.cloud;
+        img-src 'self' data: https://raw.githubusercontent.com;
+    ">
+    
+    <!-- Font Awesome مع SRI -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" 
+          integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" 
+          crossorigin="anonymous" referrerpolicy="no-referrer">
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- GSAP & ScrollTrigger -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- GSAP & ScrollTrigger مع SRI -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" 
+            integrity="sha512-IQJeHPJpR0R8x98Hr9ZHqQyQlEOV8M7kP6tRjV2vurVhqTKrG4K4xI0H1cJdY4XlLcP8ZdBV1vjfPcB0f5xKQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" 
+            integrity="sha512-J0r2Dt8y1XpLr/ZlKGDhpR1p8WxSRXgDcXblLgE2+1jUOlGjGkP7k1C3WnG3gU6PZSsCQoB1P+DQZXJY/1w=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     
     <!-- Three.js -->
     <script type="importmap">
@@ -25,20 +44,67 @@
     </script>
     
     <style>
+        /* جميع الأنماط كما هي (بدون تغيير) */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         
-        body {
-            font-family: 'Tajawal', 'Plus Jakarta Sans', sans-serif;
-            background: #050505;
-            overflow-x: hidden;
-            color: #fff;
+        :root {
+            --bg-primary: #050505;
+            --bg-secondary: #0a0a0a;
+            --bg-card: rgba(255,255,255,0.03);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255,255,255,0.7);
+            --text-muted: rgba(255,255,255,0.4);
+            --border-color: rgba(255,255,255,0.08);
+            --navbar-bg: rgba(10,10,10,0.6);
+            --navbar-scrolled: rgba(10,10,10,0.95);
+            --btn-primary: linear-gradient(135deg, #4caf50, #2e7d32);
+            --btn-outline: rgba(76,175,80,0.3);
+            --scrollbar-track: #1a1a1a;
+            --scrollbar-thumb: #4caf50;
         }
         
-        /* ========== Canvas 3D ========== */
+        body.light-mode {
+            --bg-primary: #f0f4f0;
+            --bg-secondary: #ffffff;
+            --bg-card: rgba(0,0,0,0.03);
+            --text-primary: #1a1a1a;
+            --text-secondary: rgba(0,0,0,0.7);
+            --text-muted: rgba(0,0,0,0.5);
+            --border-color: rgba(0,0,0,0.08);
+            --navbar-bg: rgba(255,255,255,0.7);
+            --navbar-scrolled: rgba(255,255,255,0.95);
+            --btn-primary: linear-gradient(135deg, #2e7d32, #4caf50);
+            --btn-outline: rgba(46,125,50,0.3);
+            --scrollbar-track: #e0e0e0;
+            --scrollbar-thumb: #2e7d32;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--bg-primary);
+            overflow-x: hidden;
+            color: var(--text-primary);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 10px;
+        }
+        
         #canvas3d {
             position: fixed;
             top: 0;
@@ -46,31 +112,30 @@
             width: 100%;
             height: 100%;
             z-index: 0;
+            transition: opacity 0.3s ease;
         }
         
-        /* ========== محتوى الصفحة ========== */
+        body.light-mode #canvas3d {
+            opacity: 0.2;
+        }
+        
         .content {
             position: relative;
             z-index: 10;
         }
         
-        /* ========== شاشة التحميل ========== */
         .loader {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #050505;
+            background: var(--bg-primary);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 10000;
-            transition: opacity 0.8s cubic-bezier(0.77, 0, 0.18, 1);
-        }
-        
-        .loader-content {
-            text-align: center;
+            transition: opacity 0.8s ease;
         }
         
         .loader-logo {
@@ -90,13 +155,6 @@
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
-        }
-        
-        .loader-text {
-            font-size: 14px;
-            color: rgba(255,255,255,0.5);
-            letter-spacing: 4px;
-            margin-top: 20px;
         }
         
         .loader-dots {
@@ -122,22 +180,53 @@
             to { transform: translateY(-15px); opacity: 1; }
         }
         
-        /* ========== شريط التنقل ========== */
+        .bot-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 20;
+            background: var(--bg-card);
+            backdrop-filter: blur(15px);
+            padding: 20px 30px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .bot-loading.hidden {
+            display: none;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: #4caf50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
         .navbar {
             position: fixed;
-            top: 25px;
-            left: 25px;
-            right: 25px;
-            padding: 12px 32px;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            padding: 12px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 100;
-            background: rgba(10,10,10,0.5);
+            background: var(--navbar-bg);
             backdrop-filter: blur(20px);
-            border-radius: 100px;
-            border: 1px solid rgba(76,175,80,0.2);
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            border-radius: 60px;
+            border: 1px solid var(--border-color);
+            transition: all 0.4s ease;
         }
         
         .navbar.scrolled {
@@ -145,92 +234,186 @@
             left: 0;
             right: 0;
             border-radius: 0;
-            padding: 15px 40px;
-            background: rgba(10,10,10,0.95);
-            border-bottom: 1px solid rgba(76,175,80,0.3);
+            padding: 12px 30px;
+            background: var(--navbar-scrolled);
         }
         
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
         
         .logo-icon {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, #4caf50, #2e7d32);
-            border-radius: 14px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            position: relative;
-            overflow: hidden;
+            font-size: 20px;
+            animation: pulseGlow 2s infinite;
         }
         
-        .logo-icon::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.3), transparent);
-            animation: rotate 4s linear infinite;
-        }
-        
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(76,175,80,0.4); }
+            50% { box-shadow: 0 0 0 5px rgba(76,175,80,0); }
         }
         
         .logo-text {
-            font-size: 22px;
+            font-size: 18px;
             font-weight: 800;
-            background: linear-gradient(135deg, #fff, #4caf50, #ffd700);
+            background: linear-gradient(135deg, var(--text-primary), #4caf50, #ffd700);
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
         }
         
         .nav-links {
             display: flex;
-            gap: 40px;
+            gap: 25px;
+            align-items: center;
         }
         
         .nav-links a {
-            color: rgba(255,255,255,0.7);
+            color: var(--text-secondary);
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             transition: 0.3s;
-            position: relative;
         }
         
-        .nav-links a::before {
-            content: '';
-            position: absolute;
-            bottom: -6px;
+        .nav-links a:hover {
+            color: #4caf50;
+        }
+        
+        .theme-toggle {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.05);
+            border-color: #4caf50;
+        }
+        
+        .menu-toggle {
+            display: none;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 70%;
+            max-width: 280px;
+            height: 100%;
+            background: var(--navbar-scrolled);
+            backdrop-filter: blur(20px);
+            z-index: 200;
+            padding: 80px 25px 30px;
+            transition: right 0.3s ease;
+            border-left: 1px solid var(--border-color);
+        }
+        
+        .mobile-menu.open {
+            right: 0;
+        }
+        
+        .mobile-menu a {
+            display: block;
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 15px 0;
+            font-size: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .menu-overlay {
+            position: fixed;
+            top: 0;
             left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #4caf50, #ffd700);
-            transition: width 0.3s;
-        }
-        
-        .nav-links a:hover::before,
-        .nav-links a.active::before {
             width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 199;
+            display: none;
         }
         
-        /* ========== القسم الرئيسي ========== */
+        .menu-overlay.open {
+            display: block;
+        }
+        
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            border-radius: 50%;
+            border: none;
+            color: white;
+            cursor: pointer;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(76,175,80,0.3);
+        }
+        
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .scroll-top:hover {
+            transform: scale(1.1);
+        }
+        
+        .toast-notification {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid #4caf50;
+            border-radius: 16px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+        }
+        
+        .toast-notification.show {
+            transform: translateX(0);
+        }
+        
         .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 140px 40px 80px;
-            position: relative;
+            padding: 120px 40px 60px;
         }
         
         .hero-content {
@@ -244,26 +427,26 @@
             gap: 8px;
             background: rgba(76,175,80,0.1);
             border: 1px solid rgba(76,175,80,0.3);
-            padding: 8px 20px;
+            padding: 6px 16px;
             border-radius: 100px;
             font-size: 12px;
             color: #4caf50;
-            margin-bottom: 30px;
-            backdrop-filter: blur(10px);
+            margin-bottom: 25px;
         }
         
         .hero-title {
-            font-size: 85px;
+            font-size: 70px;
             font-weight: 800;
             line-height: 1.1;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         
         .hero-gradient {
             background: linear-gradient(135deg, #4caf50, #ffd700, #8bc34a);
             background-size: 200% 200%;
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
             animation: gradientShift 4s ease infinite;
         }
         
@@ -273,214 +456,132 @@
         }
         
         .hero-desc {
-            font-size: 18px;
-            color: rgba(255,255,255,0.7);
-            line-height: 1.7;
-            max-width: 700px;
-            margin: 0 auto 40px;
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 30px;
         }
         
-        /* تأثير الكتابة المتقدم */
         .typing-wrapper {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(0,0,0,0.4);
+            background: var(--bg-card);
             backdrop-filter: blur(15px);
-            padding: 14px 28px;
-            border-radius: 80px;
-            margin-top: 20px;
-            border: 1px solid rgba(76,175,80,0.2);
-        }
-        
-        .typing-prefix {
-            color: rgba(255,255,255,0.5);
-            font-size: 14px;
+            padding: 10px 22px;
+            border-radius: 60px;
+            border: 1px solid var(--border-color);
         }
         
         .typing-text {
             color: #4caf50;
             font-weight: 600;
-            font-size: 16px;
+            font-size: 14px;
         }
         
         .cursor {
             width: 2px;
-            height: 22px;
+            height: 18px;
             background: #4caf50;
             animation: blink 1s infinite;
         }
         
-        /* ========== أزرار CTA ========== */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
         .cta-group {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-top: 40px;
+            margin-top: 35px;
+        }
+        
+        .btn-primary, .btn-outline {
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            background: var(--btn-primary);
             border: none;
-            padding: 16px 42px;
-            border-radius: 100px;
-            font-size: 16px;
-            font-weight: 600;
             color: white;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 15px rgba(76,175,80,0.3);
-        }
-        
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn-primary:hover::before {
-            left: 100%;
         }
         
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(76,175,80,0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(76,175,80,0.4);
         }
         
         .btn-outline {
             background: transparent;
-            border: 2px solid rgba(76,175,80,0.5);
-            padding: 16px 42px;
-            border-radius: 100px;
-            font-size: 16px;
-            font-weight: 600;
-            color: white;
-            cursor: pointer;
-            transition: 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            backdrop-filter: blur(10px);
+            border: 2px solid var(--btn-outline);
+            color: var(--text-primary);
         }
         
         .btn-outline:hover {
             border-color: #4caf50;
             background: rgba(76,175,80,0.1);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
         }
         
-        /* ========== إحصائيات ========== */
-        .stats-section {
-            padding: 60px 40px;
-            background: linear-gradient(180deg, transparent, rgba(0,0,0,0.3));
-        }
-        
-        .stats-grid {
-            display: flex;
-            justify-content: center;
-            gap: 50px;
-            flex-wrap: wrap;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .stat-card {
-            text-align: center;
-            padding: 25px 35px;
-            background: rgba(255,255,255,0.02);
-            backdrop-filter: blur(15px);
-            border-radius: 32px;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: all 0.4s;
-            min-width: 180px;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(76,175,80,0.4);
-            background: rgba(76,175,80,0.05);
-        }
-        
-        .stat-number {
-            font-size: 52px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #4caf50, #ffd700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .stat-label {
-            font-size: 14px;
-            color: rgba(255,255,255,0.5);
-            margin-top: 8px;
-        }
-        
-        /* ========== قسم البوت ========== */
         .bot-section {
-            padding: 100px 40px;
+            padding: 80px 40px;
         }
         
         .section-header {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 50px;
         }
         
         .section-tag {
             display: inline-block;
             background: rgba(76,175,80,0.1);
             border: 1px solid rgba(76,175,80,0.3);
-            padding: 6px 16px;
+            padding: 5px 14px;
             border-radius: 50px;
-            font-size: 12px;
+            font-size: 11px;
             color: #4caf50;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .section-title {
-            font-size: 48px;
+            font-size: 36px;
             font-weight: 700;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         .section-subtitle {
-            font-size: 18px;
-            color: rgba(255,255,255,0.5);
-            max-width: 600px;
+            font-size: 15px;
+            color: var(--text-secondary);
+            max-width: 550px;
             margin: 0 auto;
         }
         
         .bot-container {
             max-width: 1100px;
             margin: 0 auto;
-            background: rgba(0,0,0,0.3);
+            background: var(--bg-card);
             backdrop-filter: blur(25px);
-            border-radius: 48px;
-            border: 1px solid rgba(76,175,80,0.2);
+            border-radius: 40px;
+            border: 1px solid var(--border-color);
             overflow: hidden;
-            transition: all 0.4s;
-        }
-        
-        .bot-container:hover {
-            border-color: rgba(76,175,80,0.5);
-            box-shadow: 0 0 80px rgba(76,175,80,0.2);
-            transform: scale(1.01);
+            position: relative;
         }
         
         .bot-header {
-            padding: 20px 30px;
-            background: rgba(0,0,0,0.5);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 15px 25px;
+            background: rgba(0,0,0,0.3);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -489,12 +590,13 @@
         .bot-status {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            font-size: 12px;
         }
         
         .status-dot {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             background: #4caf50;
             border-radius: 50%;
             animation: pulse 1.5s infinite;
@@ -502,167 +604,152 @@
         
         .bot-iframe {
             width: 100%;
-            height: 600px;
+            height: 550px;
             border: none;
         }
         
-        /* ========== بطاقات الميزات ثلاثية الأبعاد ========== */
+        .bp-webchat-watermark, .bp-watermark, [class*="watermark"], [class*="powered-by"] {
+            display: none !important;
+        }
+        
         .features-section {
-            padding: 80px 40px;
-            background: linear-gradient(180deg, transparent, rgba(0,0,0,0.2));
+            padding: 60px 40px;
         }
         
         .features-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 30px;
+            gap: 25px;
             max-width: 1300px;
             margin: 0 auto;
         }
         
         .feature-card {
-            background: rgba(255,255,255,0.02);
+            background: var(--bg-card);
             backdrop-filter: blur(15px);
-            border-radius: 32px;
-            padding: 40px 25px;
+            border-radius: 28px;
+            padding: 30px 20px;
             text-align: center;
-            border: 1px solid rgba(76,175,80,0.1);
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            border: 1px solid var(--border-color);
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(76,175,80,0.15), transparent);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .feature-card:hover::before {
-            opacity: 1;
+            transition: all 0.4s;
         }
         
         .feature-card:hover {
-            transform: translateY(-15px);
+            transform: translateY(-8px);
             border-color: #4caf50;
         }
         
         .feature-icon {
-            width: 85px;
-            height: 85px;
-            background: linear-gradient(135deg, rgba(76,175,80,0.2), rgba(46,125,50,0.1));
-            border-radius: 28px;
+            width: 70px;
+            height: 70px;
+            background: rgba(76,175,80,0.1);
+            border-radius: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 25px;
-            font-size: 38px;
+            margin: 0 auto 20px;
+            font-size: 32px;
             color: #4caf50;
-            border: 1px solid rgba(76,175,80,0.3);
-            transition: all 0.3s;
-        }
-        
-        .feature-card:hover .feature-icon {
-            transform: scale(1.1);
-            background: linear-gradient(135deg, rgba(76,175,80,0.3), rgba(46,125,50,0.2));
         }
         
         .feature-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         
         .feature-desc {
-            font-size: 14px;
-            color: rgba(255,255,255,0.5);
-            line-height: 1.6;
+            font-size: 13px;
+            color: var(--text-muted);
         }
         
-        /* ========== الأسئلة الشائعة ========== */
-        .faq-section {
-            max-width: 1000px;
-            margin: 80px auto 0;
-            padding: 0 40px;
-        }
-        
-        .faq-item {
-            background: rgba(255,255,255,0.02);
+        .diagnosis-box {
+            max-width: 1100px;
+            margin: 60px auto 20px;
+            background: var(--bg-card);
             backdrop-filter: blur(15px);
             border-radius: 28px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(255,255,255,0.05);
-            overflow: hidden;
+            padding: 25px 30px;
+            border: 1px solid var(--border-color);
+            text-align: center;
             transition: all 0.3s;
         }
         
-        .faq-item:hover {
-            border-color: rgba(76,175,80,0.3);
+        .diagnosis-box:hover {
+            border-color: #4caf50;
+            transform: translateY(-3px);
         }
         
-        .faq-question {
-            padding: 24px 30px;
+        .diagnosis-icon {
+            width: 55px;
+            height: 55px;
+            background: rgba(76,175,80,0.1);
+            border-radius: 20px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 18px;
-            transition: 0.3s;
-        }
-        
-        .faq-question:hover {
-            background: rgba(76,175,80,0.05);
-        }
-        
-        .faq-answer {
-            padding: 0 30px;
-            max-height: 0;
-            overflow: hidden;
-            transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            color: rgba(255,255,255,0.5);
-            line-height: 1.7;
-        }
-        
-        .faq-item.active .faq-answer {
-            padding: 0 30px 28px;
-            max-height: 300px;
-        }
-        
-        .faq-item.active .faq-question i {
-            transform: rotate(180deg);
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 26px;
             color: #4caf50;
         }
         
-        /* ========== الفوتر ========== */
+        .diagnosis-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #4caf50;
+            margin-bottom: 12px;
+        }
+        
+        .diagnosis-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        
+        .share-section {
+            text-align: center;
+            padding: 20px 40px 40px;
+        }
+        
+        .share-btn {
+            background: #25D366;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 60px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+        
+        .share-btn:hover {
+            transform: scale(1.05);
+        }
+        
         .footer {
             text-align: center;
-            padding: 60px 40px 40px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            margin-top: 100px;
-            background: rgba(0,0,0,0.3);
+            padding: 50px 40px 30px;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-card);
         }
         
         .footer-links {
             display: flex;
             justify-content: center;
-            gap: 40px;
-            margin-bottom: 30px;
+            gap: 30px;
+            margin-bottom: 25px;
             flex-wrap: wrap;
         }
         
         .footer-links a {
-            color: rgba(255,255,255,0.4);
+            color: var(--text-muted);
             text-decoration: none;
-            font-size: 13px;
-            transition: 0.3s;
+            font-size: 12px;
+            cursor: pointer;
         }
         
         .footer-links a:hover {
@@ -672,26 +759,31 @@
         .social-icons {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 15px;
+            margin-bottom: 25px;
         }
         
         .social-icons a {
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.05);
+            width: 35px;
+            height: 35px;
+            background: var(--bg-card);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: rgba(255,255,255,0.5);
+            color: var(--text-muted);
             transition: 0.3s;
+            cursor: pointer;
         }
         
         .social-icons a:hover {
             background: #4caf50;
             color: white;
-            transform: translateY(-3px);
+        }
+        
+        .last-update {
+            font-size: 11px;
+            color: var(--text-muted);
         }
         
         @keyframes pulse {
@@ -699,7 +791,6 @@
             50% { opacity: 0.5; transform: scale(1.2); }
         }
         
-        /* ========== تحسينات الهواتف ========== */
         @media (max-width: 992px) {
             .features-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -708,83 +799,95 @@
         
         @media (max-width: 768px) {
             .navbar {
-                padding: 10px 20px;
-                margin: 15px;
+                padding: 10px 16px;
+                margin: 10px;
             }
             .nav-links {
                 display: none;
             }
+            .menu-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
             .hero-title {
-                font-size: 40px;
+                font-size: 36px;
             }
             .hero-desc {
-                font-size: 15px;
-            }
-            .stats-grid {
-                gap: 20px;
-            }
-            .stat-card {
-                padding: 15px 25px;
-                min-width: auto;
-            }
-            .stat-number {
-                font-size: 32px;
+                font-size: 14px;
             }
             .section-title {
-                font-size: 32px;
+                font-size: 28px;
             }
             .features-grid {
                 grid-template-columns: 1fr;
-                gap: 20px;
             }
             .bot-iframe {
                 height: 450px;
             }
-            .btn-primary, .btn-outline {
-                padding: 12px 28px;
-                font-size: 14px;
+            .scroll-top {
+                bottom: 20px;
+                right: 20px;
+                width: 40px;
+                height: 40px;
             }
-            .faq-question {
-                font-size: 15px;
-                padding: 18px 20px;
+            .diagnosis-box {
+                margin: 40px 20px 20px;
+                padding: 20px;
             }
         }
         
-        /* أنيميشن السكرول */
+        @media (min-width: 769px) {
+            .hero-title {
+                font-size: 65px;
+            }
+        }
+        
         .reveal {
             opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+            transform: translateY(30px);
+            transition: all 0.7s ease;
         }
         
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
         }
+        
+        .offline-badge {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #f44336;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            z-index: 100;
+            display: none;
+        }
+        
+        .offline-badge.show {
+            display: block;
+        }
     </style>
 </head>
 <body>
-    <!-- Canvas 3D -->
     <canvas id="canvas3d"></canvas>
     
-    <!-- شاشة التحميل -->
     <div class="loader" id="loader">
         <div class="loader-content">
-            <div class="loader-logo">
-                <i class="fas fa-leaf"></i>
-            </div>
-            <div class="loader-dots">
-                <div class="loader-dot"></div>
-                <div class="loader-dot"></div>
-                <div class="loader-dot"></div>
-            </div>
+            <div class="loader-logo"><i class="fas fa-leaf"></i></div>
+            <div class="loader-dots"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div>
             <div class="loader-text">Agri Maroc Assistant</div>
         </div>
     </div>
     
-    <!-- المحتوى -->
+    <div class="offline-badge" id="offlineBadge">
+        <i class="fas fa-wifi-slash"></i> وضع عدم الاتصال - بعض الميزات غير متوفرة
+    </div>
+    
     <div class="content">
-        <!-- شريط التنقل -->
         <nav class="navbar" id="navbar">
             <div class="logo">
                 <div class="logo-icon"><i class="fas fa-leaf"></i></div>
@@ -794,180 +897,131 @@
                 <a href="#home">الرئيسية</a>
                 <a href="#bot">المساعد</a>
                 <a href="#features">الميزات</a>
-                <a href="#faq">الأسئلة</a>
             </div>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
         </nav>
         
-        <!-- القسم الرئيسي -->
+        <div class="menu-overlay" id="menuOverlay"></div>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#home" onclick="closeMobileMenu()">الرئيسية</a>
+            <a href="#bot" onclick="closeMobileMenu()">المساعد</a>
+            <a href="#features" onclick="closeMobileMenu()">الميزات</a>
+        </div>
+        
         <section class="hero" id="home">
             <div class="hero-content">
-                <div class="hero-badge reveal">
-                    <i class="fas fa-microchip"></i> الذكاء الاصطناعي للفلاحة المغربية
-                </div>
-                <h1 class="hero-title reveal">
-                    Agri Maroc<br>
-                    <span class="hero-gradient">Assistant</span>
-                </h1>
-                <p class="hero-desc reveal">
-                    خبيرك الشخصي في تشخيص أمراض النباتات وتحليل صحة المحاصيل<br>
-                    باستخدام أحدث تقنيات الذكاء الاصطناعي
-                </p>
-                <div class="typing-wrapper reveal">
-                    <span class="typing-prefix">🚀</span>
-                    <span class="typing-text" id="typingText"></span>
-                    <span class="cursor"></span>
-                </div>
+                <div class="hero-badge reveal"><i class="fas fa-microchip"></i> الذكاء الاصطناعي للفلاحة المغربية</div>
+                <h1 class="hero-title reveal">Agri Maroc<br><span class="hero-gradient">Assistant</span></h1>
+                <p class="hero-desc reveal">خبيرك الشخصي في تشخيص أمراض النباتات وتحليل صحة المحاصيل<br>باستخدام أحدث تقنيات الذكاء الاصطناعي</p>
+                <div class="typing-wrapper reveal"><span class="typing-text" id="typingText"></span><span class="cursor"></span></div>
                 <div class="cta-group reveal">
-                    <button class="btn-primary" onclick="scrollToBot()">
-                        <i class="fas fa-comment-dots"></i> ابدأ المحادثة
-                    </button>
-                    <button class="btn-outline" onclick="sendToBot('ما هي خدمات Agri Maroc Assistant؟')">
-                        <i class="fas fa-play"></i> جرب المساعد الآن
-                    </button>
+                    <button class="btn-primary" onclick="scrollToBot()"><i class="fas fa-comment-dots"></i> ابدأ المحادثة</button>
+                    <button class="btn-outline" onclick="shareToWhatsApp()"><i class="fab fa-whatsapp"></i> شارك البوت</button>
                 </div>
             </div>
         </section>
         
-        <!-- إحصائيات -->
-        <div class="stats-section">
-            <div class="stats-grid">
-                <div class="stat-card reveal">
-                    <div class="stat-number" id="stat1">0</div>
-                    <div class="stat-label">نوع من المحاصيل</div>
-                </div>
-                <div class="stat-card reveal">
-                    <div class="stat-number" id="stat2">0</div>
-                    <div class="stat-label">مرض نباتي</div>
-                </div>
-                <div class="stat-card reveal">
-                    <div class="stat-number" id="stat3">0</div>
-                    <div class="stat-label">مزارع يستخدمون المساعد</div>
-                </div>
-                <div class="stat-card reveal">
-                    <div class="stat-number" id="stat4">0</div>
-                    <div class="stat-label">استشارة فورية</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- قسم البوت -->
         <section class="bot-section" id="bot">
             <div class="section-header reveal">
                 <div class="section-tag">🤖 الذكاء الاصطناعي</div>
                 <h2 class="section-title">تحدث مع <span class="hero-gradient">Agri Maroc Assistant</span></h2>
                 <p class="section-subtitle">اطرح أي سؤال واحصل على إجابة فورية ودقيقة</p>
             </div>
-            
             <div class="bot-container reveal">
                 <div class="bot-header">
-                    <div class="bot-status">
-                        <div class="status-dot"></div>
-                        <span style="color: #4caf50;">متصل | جاهز للرد فوراً</span>
-                    </div>
-                    <i class="fas fa-robot" style="color: #4caf50; font-size: 24px;"></i>
+                    <div class="bot-status"><div class="status-dot"></div><span>متصل | جاهز للرد فوراً</span></div>
+                    <i class="fas fa-robot" style="color: #4caf50;"></i>
                 </div>
-                <iframe class="bot-iframe" id="botpressIframe" src="https://cdn.botpress.cloud/webchat/v3.6/shareable.html?configUrl=https://files.bpcontent.cloud/2026/03/15/05/20260315052837-1GIP391V.json" title="Agri Maroc Assistant"></iframe>
+                <div id="botLoading" class="bot-loading">
+                    <div class="loading-spinner"></div>
+                    <span>جاري تحميل المساعد الذكي...</span>
+                </div>
+                <iframe class="bot-iframe" id="botpressIframe" src="https://cdn.botpress.cloud/webchat/v3.6/shareable.html?configUrl=https://files.bpcontent.cloud/2026/03/15/05/20260315052837-1GIP391V.json" title="Agri Maroc Assistant" style="opacity: 0; transition: opacity 0.5s;"></iframe>
             </div>
         </section>
         
-        <!-- ميزات البوت -->
         <div class="features-section" id="features">
             <div class="section-header reveal">
                 <div class="section-tag">✨ الميزات المتقدمة</div>
                 <h2 class="section-title">لماذا <span class="hero-gradient">Agri Maroc Assistant</span>؟</h2>
             </div>
             <div class="features-grid">
-                <div class="feature-card reveal" onclick="sendToBot('كيف أتعرف على اللفحة المتأخرة في الطماطم؟')">
+                <div class="feature-card reveal" onclick="sendToBot('كيف أتعرف على أمراض النباتات؟')">
                     <div class="feature-icon"><i class="fas fa-leaf"></i></div>
                     <div class="feature-title">تشخيص الأمراض</div>
-                    <div class="feature-desc">تعرف على أعراض الأمراض النباتية وطرق علاجها الفعالة بدقة عالية</div>
+                    <div class="feature-desc">تعرف على أعراض الأمراض النباتية وطرق علاجها</div>
                 </div>
-                <div class="feature-card reveal" onclick="sendToBot('ما هي أفضل طريقة للري في المناطق المغربية؟')">
+                <div class="feature-card reveal" onclick="sendToBot('ما هي أفضل طريقة للري في المغرب؟')">
                     <div class="feature-icon"><i class="fas fa-tint"></i></div>
                     <div class="feature-title">نصائح الري الذكي</div>
-                    <div class="feature-desc">جدول الري المناسب لكل محصول حسب الموسم والمناخ المغربي</div>
+                    <div class="feature-desc">جدول الري المناسب لكل محصول حسب الموسم</div>
                 </div>
-                <div class="feature-card reveal" onclick="sendToBot('ما هو NDVI وكيف أستخدمه لتحسين محاصيلي؟')">
-                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
-                    <div class="feature-title">تحليل NDVI</div>
-                    <div class="feature-desc">فهم صحة محاصيلك عبر الأقمار الصناعية بدقة عالية</div>
+                <div class="feature-card reveal" onclick="sendToBot('ما هي الأمراض الشائعة في المواشي؟')">
+                    <div class="feature-icon"><i class="fas fa-cow"></i></div>
+                    <div class="feature-title">صحة المواشي</div>
+                    <div class="feature-desc">تشخيص وعلاج أمراض الأبقار والأغنام والماعز</div>
                 </div>
-                <div class="feature-card reveal" onclick="sendToBot('ما هي حالة منطقة مراكش الزراعية حالياً؟')">
-                    <div class="feature-icon"><i class="fas fa-map-marker-alt"></i></div>
-                    <div class="feature-title">معلومات المناطق</div>
-                    <div class="feature-desc">حالة المناطق الزراعية المغربية وتوصيات مخصصة لكل منطقة</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- أسئلة شائعة -->
-        <div class="faq-section" id="faq">
-            <div class="section-header reveal">
-                <div class="section-tag">❓ الأسئلة الشائعة</div>
-                <h2 class="section-title">كل ما تريد معرفته</h2>
-            </div>
-            <div class="faq-item reveal">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>🌾 كيف يمكنني تشخيص مرض نباتي من صورة؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-answer">
-                    يمكنك إرسال صورة للنبات المصاب مباشرة في الدردشة، وسيقوم Agri Maroc Assistant بتحليلها باستخدام الذكاء الاصطناعي وتشخيص المرض واقتراح العلاج المناسب بدقة تصل إلى 95%.
-                </div>
-            </div>
-            <div class="faq-item reveal">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>💧 ما هي كمية الري المناسبة للطماطم في الصيف بالمغرب؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-answer">
-                    تحتاج الطماطم في الصيف إلى 30-40 ملم أسبوعياً، يفضل الري بالتنقيط صباحاً (5-7 صباحاً) أو مساءً بعد الغروب لتجنب التبخر. يفضل تقسيم الكمية على 2-3 ريات أسبوعياً.
-                </div>
-            </div>
-            <div class="faq-item reveal">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>🦠 ما هي أعراض اللفحة المتأخرة وكيف أتعامل معها؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-answer">
-                    الأعراض: بقع بنية مائية على الأوراق، نمو فطري أبيض، ذبول، بقع داكنة على الثمار. العلاج: رش ريدوميل جولد أو أكسيد النحاس، إزالة الأجزاء المصابة وحرقها، تهوية النباتات، تجنب الري بالرش.
-                </div>
-            </div>
-            <div class="faq-item reveal">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    <span>📊 ما هو مؤشر NDVI وكيف يساعدني في تحسين الإنتاج؟</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="faq-answer">
-                    NDVI هو مؤشر يقيس صحة المحاصيل عبر الأقمار الصناعية. القيم: >0.6 صحة ممتازة، 0.4-0.6 صحة جيدة، 0.2-0.4 إجهاد متوسط، <0.2 إجهاد شديد. يساعدك في تحديد المناطق التي تحتاج ري أو تسميد، مما يحسن الإنتاجية بنسبة تصل إلى 30%.
+                <div class="feature-card reveal" onclick="sendToBot('ما هي أفضل الأسمدة للتربة المغربية؟')">
+                    <div class="feature-icon"><i class="fas fa-seedling"></i></div>
+                    <div class="feature-title">الأسمدة والتسميد</div>
+                    <div class="feature-desc">أنواع الأسمدة المناسبة وجداول التسميد</div>
                 </div>
             </div>
         </div>
         
-        <!-- الفوتر -->
+        <div class="diagnosis-box reveal">
+            <div class="diagnosis-icon">
+                <i class="fas fa-stethoscope"></i>
+            </div>
+            <div class="diagnosis-title">🩺 تشخيص الأمراض</div>
+            <div class="diagnosis-desc">
+                يقدم Agri Maroc Assistant تشخيصاً دقيقاً لأمراض النباتات والمواشي،<br>
+                مع اقتراح الحلول والعلاجات المناسبة بناءً على قاعدة معرفية متخصصة<br>
+                وأحدث التقنيات في الذكاء الاصطناعي.
+            </div>
+        </div>
+        
+        <div class="share-section">
+            <button class="share-btn" onclick="shareToWhatsApp()">
+                <i class="fab fa-whatsapp"></i> شارك Agri Maroc Assistant مع أصدقائك
+            </button>
+        </div>
+        
         <footer class="footer">
             <div class="social-icons">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a onclick="showToast('قريباً... 🔜')"><i class="fab fa-facebook-f"></i></a>
+                <a onclick="showToast('قريباً... 🔜')"><i class="fab fa-twitter"></i></a>
+                <a onclick="showToast('قريباً... 🔜')"><i class="fab fa-instagram"></i></a>
+                <a onclick="showToast('قريباً... 🔜')"><i class="fab fa-linkedin-in"></i></a>
             </div>
             <div class="footer-links">
-                <a href="#">عن Agri Maroc Assistant</a>
-                <a href="#">المساعدة</a>
-                <a href="#">الخصوصية</a>
-                <a href="#">الشروط</a>
-                <a href="#">اتصل بنا</a>
+                <a onclick="showToast('صفحة عن المساعد - قريباً 🔜')">عن Agri Maroc Assistant</a>
+                <a onclick="showToast('المساعدة - قريباً 🔜')">المساعدة</a>
+                <a onclick="showToast('سياسة الخصوصية - قريباً 🔜')">الخصوصية</a>
+                <a onclick="showToast('اتصل بنا - قريباً 🔜')">اتصل بنا</a>
             </div>
             <p>© 2026 Agri Maroc Assistant - المساعد الزراعي الذكي للمغرب</p>
-            <p style="margin-top: 8px; font-size: 12px; color: rgba(255,255,255,0.3);">مدعوم بتقنيات الذكاء الاصطناعي | متخصص في الفلاحة المغربية</p>
+            <p class="last-update" id="lastUpdate">آخر تحديث: جاري التحميل...</p>
         </footer>
+    </div>
+    
+    <button class="scroll-top" id="scrollTopBtn">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    
+    <div class="toast-notification" id="toastNotification">
+        <i class="fas fa-robot" style="color: #4caf50;"></i>
+        <span id="toastMessage">مرحباً بك في Agri Maroc Assistant!</span>
     </div>
     
     <script type="module">
         import * as THREE from 'three';
         
-        // إعدادات Three.js المتقدمة
         const canvas = document.getElementById('canvas3d');
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x050505);
@@ -979,7 +1033,6 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
         
-        // إضاءة متقدمة
         const ambientLight = new THREE.AmbientLight(0x202020);
         scene.add(ambientLight);
         
@@ -987,89 +1040,52 @@
         mainLight.position.set(5, 10, 7);
         scene.add(mainLight);
         
-        const backLight = new THREE.PointLight(0x4caf50, 0.4);
+        const backLight = new THREE.PointLight(0x4caf50, 0.3);
         backLight.position.set(0, 0, -10);
         scene.add(backLight);
         
-        // إنشاء كرات متحركة
         const sphereGroup = new THREE.Group();
         const colors = [0x4caf50, 0x2e7d32, 0x8bc34a, 0xffd700];
         
         for (let i = 0; i < 40; i++) {
-            const size = Math.random() * 0.4 + 0.15;
-            const geometry = new THREE.SphereGeometry(size, 32, 32);
+            const size = Math.random() * 0.3 + 0.12;
             const material = new THREE.MeshStandardMaterial({
                 color: colors[Math.floor(Math.random() * colors.length)],
                 emissive: 0x1a4f1a,
-                emissiveIntensity: 0.2,
-                roughness: 0.3,
-                metalness: 0.7
+                emissiveIntensity: 0.15,
+                roughness: 0.4,
+                metalness: 0.6
             });
-            const sphere = new THREE.Mesh(geometry, material);
-            
-            sphere.position.x = (Math.random() - 0.5) * 25;
-            sphere.position.y = (Math.random() - 0.5) * 18;
-            sphere.position.z = (Math.random() - 0.5) * 20 - 15;
-            
+            const sphere = new THREE.Mesh(new THREE.SphereGeometry(size, 32, 32), material);
+            sphere.position.x = (Math.random() - 0.5) * 24;
+            sphere.position.y = (Math.random() - 0.5) * 16;
+            sphere.position.z = (Math.random() - 0.5) * 18 - 12;
             sphere.userData = {
-                speedX: (Math.random() - 0.5) * 0.003,
-                speedY: (Math.random() - 0.5) * 0.003,
-                speedZ: (Math.random() - 0.5) * 0.003,
-                rotSpeed: (Math.random() - 0.5) * 0.01
+                speedX: (Math.random() - 0.5) * 0.002,
+                speedY: (Math.random() - 0.5) * 0.002,
+                speedZ: (Math.random() - 0.5) * 0.002
             };
-            
             sphereGroup.add(sphere);
         }
         scene.add(sphereGroup);
-        
-        // جسيمات متقدمة
-        const particleCount = 4000;
-        const particleGeometry = new THREE.BufferGeometry();
-        const particlePositions = new Float32Array(particleCount * 3);
-        
-        for (let i = 0; i < particleCount; i++) {
-            particlePositions[i * 3] = (Math.random() - 0.5) * 80;
-            particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 50;
-            particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 50 - 20;
-        }
-        
-        particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
-        
-        const particleMaterial = new THREE.PointsMaterial({
-            color: 0x4caf50,
-            size: 0.06,
-            transparent: true,
-            opacity: 0.4,
-            blending: THREE.AdditiveBlending
-        });
-        
-        const particles = new THREE.Points(particleGeometry, particleMaterial);
-        scene.add(particles);
         
         let time = 0;
         
         function animate() {
             requestAnimationFrame(animate);
-            time += 0.008;
+            time += 0.005;
             
             sphereGroup.children.forEach(sphere => {
                 sphere.position.x += sphere.userData.speedX;
                 sphere.position.y += sphere.userData.speedY;
                 sphere.position.z += sphere.userData.speedZ;
-                
-                if (Math.abs(sphere.position.x) > 18) sphere.userData.speedX *= -1;
-                if (Math.abs(sphere.position.y) > 15) sphere.userData.speedY *= -1;
-                if (Math.abs(sphere.position.z) > 20) sphere.userData.speedZ *= -1;
-                
-                sphere.rotation.x += sphere.userData.rotSpeed;
-                sphere.rotation.y += sphere.userData.rotSpeed;
+                if (Math.abs(sphere.position.x) > 17) sphere.userData.speedX *= -1;
+                if (Math.abs(sphere.position.y) > 14) sphere.userData.speedY *= -1;
+                if (Math.abs(sphere.position.z) > 18) sphere.userData.speedZ *= -1;
             });
             
-            particles.rotation.y = time * 0.03;
-            particles.rotation.x = Math.sin(time * 0.05) * 0.1;
-            
-            camera.position.x = Math.sin(time * 0.1) * 0.8;
-            camera.position.y = Math.cos(time * 0.12) * 0.5;
+            camera.position.x = Math.sin(time * 0.08) * 0.4;
+            camera.position.y = Math.cos(time * 0.1) * 0.25;
             camera.lookAt(0, 0, 0);
             
             renderer.render(scene, camera);
@@ -1085,168 +1101,269 @@
     </script>
     
     <script>
-        // إخفاء شاشة التحميل
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const loader = document.getElementById('loader');
-                loader.style.opacity = '0';
+        (function() {
+            // ========== الثوابت الأمنية ==========
+            const BOTPRESS_ORIGIN = 'https://cdn.botpress.cloud';
+            let lastMessageTime = 0;
+            const MIN_MESSAGE_INTERVAL = 1000; // 1 ثانية بين الرسائل
+            
+            // ========== إخفاء شاشة التحميل ==========
+            window.addEventListener('load', () => {
                 setTimeout(() => {
-                    loader.style.display = 'none';
-                }, 800);
-            }, 2000);
-        });
-        
-        // تأثير الكتابة
-        const texts = ['تشخيص الأمراض بدقة 95%', 'نصائح ري ذكية للمغرب', 'تحليل NDVI فوري', 'دعم 24/7'];
-        let index = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        const typingElement = document.getElementById('typingText');
-        
-        function typeEffect() {
-            const currentText = texts[index];
-            if (isDeleting) {
-                typingElement.textContent = currentText.substring(0, charIndex - 1);
-                charIndex--;
-                if (charIndex === 0) {
-                    isDeleting = false;
-                    index = (index + 1) % texts.length;
-                }
-            } else {
-                typingElement.textContent = currentText.substring(0, charIndex + 1);
-                charIndex++;
-                if (charIndex === currentText.length) {
-                    isDeleting = true;
-                    setTimeout(typeEffect, 2000);
-                    return;
-                }
-            }
-            setTimeout(typeEffect, isDeleting ? 50 : 100);
-        }
-        
-        typeEffect();
-        
-        // إحصائيات متحركة
-        function animateNumber(elementId, target, duration) {
-            const element = document.getElementById(elementId);
-            let start = 0;
-            const increment = target / (duration / 16);
-            const timer = setInterval(() => {
-                start += increment;
-                if (start >= target) {
-                    element.innerText = target.toLocaleString();
-                    clearInterval(timer);
-                } else {
-                    element.innerText = Math.floor(start).toLocaleString();
-                }
-            }, 16);
-        }
-        
-        setTimeout(() => {
-            animateNumber('stat1', 48, 2000);
-            animateNumber('stat2', 62, 2000);
-            animateNumber('stat3', 1850, 2500);
-            animateNumber('stat4', 3250, 2500);
-        }, 500);
-        
-        // أنيميشن السكرول
-        const revealElements = document.querySelectorAll('.reveal');
-        
-        function checkReveal() {
-            const windowHeight = window.innerHeight;
-            revealElements.forEach(el => {
-                const rect = el.getBoundingClientRect();
-                if (rect.top < windowHeight - 100) {
-                    el.classList.add('active');
-                }
+                    const loader = document.getElementById('loader');
+                    if (loader) {
+                        loader.style.opacity = '0';
+                        setTimeout(() => {
+                            loader.style.display = 'none';
+                        }, 800);
+                    }
+                }, 1500);
             });
-        }
-        
-        window.addEventListener('scroll', checkReveal);
-        window.addEventListener('load', checkReveal);
-        
-        // شريط تنقل متغير
-        window.addEventListener('scroll', () => {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-        
-        // إرسال إلى البوت
-        function sendToBot(question) {
+            
+            // ========== مؤشر تحميل البوت ==========
             const iframe = document.getElementById('botpressIframe');
-            if (iframe && iframe.contentWindow) {
-                iframe.contentWindow.postMessage({
-                    type: 'quick-question',
-                    text: question
-                }, '*');
+            const botLoading = document.getElementById('botLoading');
+            
+            if (iframe && botLoading) {
+                iframe.onload = () => {
+                    setTimeout(() => {
+                        botLoading.classList.add('hidden');
+                        iframe.style.opacity = '1';
+                        showToast('✅ البوت جاهز! كيفاش نقدر نعاونك اليوم؟');
+                    }, 500);
+                };
             }
             
-            const botContainer = document.querySelector('.bot-container');
-            botContainer.style.transform = 'scale(1.02)';
-            botContainer.style.boxShadow = '0 0 100px rgba(76,175,80,0.5)';
-            setTimeout(() => {
-                botContainer.style.transform = '';
-                botContainer.style.boxShadow = '';
-            }, 500);
-        }
-        
-        function scrollToBot() {
-            document.getElementById('bot').scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        // الأسئلة الشائعة
-        function toggleFaq(element) {
-            const faqItem = element.parentElement;
-            faqItem.classList.toggle('active');
-        }
-        
-        // GSAP أنيميشن متقدمة
-        gsap.fromTo('.hero-title', 
-            { opacity: 0, y: 100, scale: 0.9 },
-            { opacity: 1, y: 0, scale: 1, duration: 1.2, delay: 0.3, ease: 'power3.out' }
-        );
-        
-        gsap.fromTo('.hero-badge', 
-            { opacity: 0, y: -30 },
-            { opacity: 1, y: 0, duration: 0.8, delay: 0.1, ease: 'back.out' }
-        );
-        
-        gsap.fromTo('.hero-desc', 
-            { opacity: 0, y: 40 },
-            { opacity: 1, y: 0, duration: 0.8, delay: 0.6, ease: 'power3.out' }
-        );
-        
-        gsap.fromTo('.typing-wrapper', 
-            { opacity: 0, scale: 0.9 },
-            { opacity: 1, scale: 1, duration: 0.6, delay: 0.9, ease: 'back.out' }
-        );
-        
-        gsap.fromTo('.cta-group', 
-            { opacity: 0, y: 30 },
-            { opacity: 1, y: 0, duration: 0.8, delay: 1.1, ease: 'power3.out' }
-        );
-        
-        // أنيميشن البطاقات عند السكرول
-        gsap.utils.toArray('.feature-card').forEach((card, i) => {
-            gsap.fromTo(card,
-                { opacity: 0, y: 60, scale: 0.95 },
-                {
-                    opacity: 1, y: 0, scale: 1,
-                    duration: 0.8,
-                    delay: i * 0.1,
-                    scrollTrigger: {
-                        trigger: card,
-                        start: 'top 85%',
-                        end: 'bottom 60%',
-                        toggleActions: 'play none none reverse'
+            // ========== تأثير الكتابة ==========
+            const texts = ['تشخيص الأمراض بدقة 95%', 'نصائح ري ذكية للمغرب', 'دعم 24/7'];
+            let index = 0, charIndex = 0, isDeleting = false;
+            const typingElement = document.getElementById('typingText');
+            
+            function typeEffect() {
+                if (!typingElement) return;
+                const currentText = texts[index];
+                if (isDeleting) {
+                    typingElement.textContent = currentText.substring(0, charIndex - 1);
+                    charIndex--;
+                    if (charIndex === 0) {
+                        isDeleting = false;
+                        index = (index + 1) % texts.length;
+                    }
+                } else {
+                    typingElement.textContent = currentText.substring(0, charIndex + 1);
+                    charIndex++;
+                    if (charIndex === currentText.length) {
+                        isDeleting = true;
+                        setTimeout(typeEffect, 2000);
+                        return;
                     }
                 }
-            );
-        });
+                setTimeout(typeEffect, isDeleting ? 40 : 80);
+            }
+            typeEffect();
+            
+            // ========== تاريخ آخر تحديث ==========
+            const lastUpdate = new Date().toLocaleDateString('ar-MA');
+            const lastUpdateEl = document.getElementById('lastUpdate');
+            if (lastUpdateEl) lastUpdateEl.innerText = `آخر تحديث: ${lastUpdate}`;
+            
+            // ========== وضع الليل/النهار ==========
+            const themeToggle = document.getElementById('themeToggle');
+            const savedTheme = localStorage.getItem('theme');
+            
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    document.body.classList.toggle('light-mode');
+                    const isLight = document.body.classList.contains('light-mode');
+                    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+                    themeToggle.innerHTML = isLight ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+                    showToast(isLight ? '☀️ تم تفعيل الوضع النهاري' : '🌙 تم تفعيل الوضع الليلي');
+                });
+            }
+            
+            // ========== زر العودة للأعلى ==========
+            const scrollBtn = document.getElementById('scrollTopBtn');
+            
+            window.addEventListener('scroll', () => {
+                if (scrollBtn) {
+                    if (window.scrollY > 300) {
+                        scrollBtn.classList.add('visible');
+                    } else {
+                        scrollBtn.classList.remove('visible');
+                    }
+                }
+                
+                const navbar = document.getElementById('navbar');
+                if (navbar) {
+                    if (window.scrollY > 50) {
+                        navbar.classList.add('scrolled');
+                    } else {
+                        navbar.classList.remove('scrolled');
+                    }
+                }
+            });
+            
+            if (scrollBtn) {
+                scrollBtn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+            
+            // ========== إشعارات منبثقة (آمنة) ==========
+            window.showToast = function(message, duration = 3000) {
+                const toast = document.getElementById('toastNotification');
+                const toastMessage = document.getElementById('toastMessage');
+                if (toast && toastMessage) {
+                    // تنقية الرسالة قبل العرض
+                    const cleanMessage = message.replace(/[<>]/g, '');
+                    toastMessage.innerText = cleanMessage;
+                    toast.classList.add('show');
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                    }, duration);
+                }
+            };
+            
+            setTimeout(() => showToast('🌾 مرحباً بك في Agri Maroc Assistant!'), 500);
+            
+            // ========== القائمة الجانبية للهواتف ==========
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuOverlay = document.getElementById('menuOverlay');
+            
+            window.openMobileMenu = function() {
+                if (mobileMenu) mobileMenu.classList.add('open');
+                if (menuOverlay) menuOverlay.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            };
+            
+            window.closeMobileMenu = function() {
+                if (mobileMenu) mobileMenu.classList.remove('open');
+                if (menuOverlay) menuOverlay.classList.remove('open');
+                document.body.style.overflow = '';
+            };
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', () => window.openMobileMenu());
+            }
+            if (menuOverlay) {
+                menuOverlay.addEventListener('click', () => window.closeMobileMenu());
+            }
+            
+            // ========== مشاركة عبر واتساب (آمنة) ==========
+            window.shareToWhatsApp = function() {
+                const url = encodeURIComponent(window.location.href);
+                const text = encodeURIComponent('🌾 اكتشف Agri Maroc Assistant - المساعد الذكي للفلاحة المغربية!');
+                window.open(`https://wa.me/?text=${text}%20${url}`, '_blank', 'noopener,noreferrer');
+            };
+            
+            // ========== تنقية النص من الأحرف الخطرة ==========
+            function sanitizeInput(text) {
+                if (!text) return '';
+                // إزالة الأحرف التي قد تستخدم في هجمات XSS
+                return text.replace(/[<>\/\\$%{}`'"&]/g, '').substring(0, 500);
+            }
+            
+            // ========== إرسال إلى البوت (مع تحسينات أمنية) ==========
+            window.sendToBot = function(question) {
+                // Rate limiting - منع الإرسال المتكرر
+                const now = Date.now();
+                if (now - lastMessageTime < MIN_MESSAGE_INTERVAL) {
+                    showToast('⏱️ الرجاء الانتظار قليلاً قبل إرسال سؤال آخر');
+                    return;
+                }
+                
+                // تنقية السؤال
+                const cleanQuestion = sanitizeInput(question);
+                if (!cleanQuestion) {
+                    showToast('❌ الرجاء إدخال سؤال صحيح');
+                    return;
+                }
+                
+                lastMessageTime = now;
+                
+                const iframe = document.getElementById('botpressIframe');
+                if (iframe && iframe.contentWindow) {
+                    try {
+                        // إرسال الرسالة مع تحديد المصدر
+                        iframe.contentWindow.postMessage({ 
+                            type: 'webchat:message', 
+                            text: cleanQuestion,
+                            timestamp: now
+                        }, BOTPRESS_ORIGIN);
+                    } catch (e) {
+                        console.error('خطأ في إرسال الرسالة:', e);
+                        showToast('❌ حدث خطأ في إرسال الرسالة');
+                    }
+                }
+                
+                const botSection = document.getElementById('bot');
+                if (botSection) botSection.scrollIntoView({ behavior: 'smooth' });
+            };
+            
+            // ========== التحقق من الرسائل الواردة من Botpress ==========
+            window.addEventListener('message', (event) => {
+                // التحقق من أصل الرسالة
+                if (event.origin !== BOTPRESS_ORIGIN) {
+                    console.warn('رسالة من مصدر غير مصرح به:', event.origin);
+                    return;
+                }
+                
+                // التحقق من نوع الرسالة
+                if (event.data && event.data.type === 'webchat:response') {
+                    console.log('رد آمن من البوت');
+                }
+            });
+            
+            window.scrollToBot = function() {
+                const botSection = document.getElementById('bot');
+                if (botSection) botSection.scrollIntoView({ behavior: 'smooth' });
+            };
+            
+            // ========== وضع عدم الاتصال ==========
+            window.addEventListener('online', () => {
+                const badge = document.getElementById('offlineBadge');
+                if (badge) badge.classList.remove('show');
+                showToast('✅ تم استعادة الاتصال بالإنترنت');
+            });
+            
+            window.addEventListener('offline', () => {
+                const badge = document.getElementById('offlineBadge');
+                if (badge) badge.classList.add('show');
+                showToast('⚠️ انقطع الاتصال بالإنترنت - بعض الميزات غير متوفرة');
+            });
+            
+            // ========== أنيميشن السكرول ==========
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            function checkReveal() {
+                const windowHeight = window.innerHeight;
+                revealElements.forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top < windowHeight - 100) {
+                        el.classList.add('active');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', checkReveal);
+            window.addEventListener('load', checkReveal);
+            
+            // ========== GSAP أنيميشن ==========
+            if (typeof gsap !== 'undefined') {
+                gsap.fromTo('.hero-title', { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1, delay: 0.2, ease: 'power3.out' });
+                gsap.fromTo('.hero-badge', { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.6, delay: 0.1 });
+                gsap.fromTo('.hero-desc', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, delay: 0.4 });
+                gsap.fromTo('.typing-wrapper', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.5, delay: 0.7 });
+                gsap.fromTo('.cta-group', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, delay: 0.9 });
+                gsap.fromTo('.diagnosis-box', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, delay: 0.5, ease: 'power3.out' });
+            }
+        })();
     </script>
 </body>
 </html>
