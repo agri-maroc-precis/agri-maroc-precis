@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المعدات الفلاحية | Agri Maroc Précis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0A1408 0%, #1A2A14 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1C2A16; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #A8842A; border-radius: 10px; }
+        
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 15px 5%;
+            background: rgba(10, 20, 8, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(168, 132, 66, 0.3);
+            transition: all 0.3s ease;
+        }
+        .header.scrolled { padding: 10px 5%; background: rgba(10, 20, 8, 0.98); }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+        .logo:hover { transform: scale(1.02); }
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #A8842A, #D4A843);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 0 20px rgba(168, 132, 66, 0.3);
+        }
+        .logo-text h1 {
+            font-size: 20px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #A8842A);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .logo-text p { font-size: 10px; color: #C1DCB5; }
+        .back-btn {
+            background: rgba(168, 132, 66, 0.15);
+            border: 1px solid rgba(168, 132, 66, 0.5);
+            padding: 10px 25px;
+            border-radius: 50px;
+            color: #A8842A;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .back-btn:hover {
+            background: #A8842A;
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(168, 132, 66, 0.3);
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 130px 20px 60px; }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .page-header .badge {
+            display: inline-block;
+            background: rgba(168, 132, 66, 0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(168, 132, 66, 0.5);
+        }
+        .page-header h1 {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #A8842A, #C1DCB5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+        .page-header p { color: #C1DCB5; font-size: 18px; max-width: 600px; margin: 0 auto; }
+        
+        .search-section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        .search-box {
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+        }
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #A8842A;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 14px 45px 14px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(168, 132, 66, 0.3);
+            border-radius: 50px;
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            font-size: 16px;
+        }
+        .search-box input:focus { outline: none; border-color: #A8842A; }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 30px;
+        }
+        
+        .product-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 25px;
+            border: 1px solid rgba(168, 132, 66, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #A8842A, #D4A843);
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+        .product-card:hover::before { transform: scaleX(1); }
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: #A8842A;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .product-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            background: rgba(0,0,0,0.3);
+        }
+        .product-icon { font-size: 50px; margin-bottom: 15px; text-align: center; }
+        .product-card h3 { font-size: 20px; font-weight: 700; text-align: center; margin-bottom: 10px; color: #A8842A; }
+        .product-desc { font-size: 13px; color: #C1DCB5; text-align: center; margin-bottom: 15px; line-height: 1.5; }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+            padding: 12px;
+        }
+        .info-item {
+            font-size: 12px;
+        }
+        .info-item strong { color: #A8842A; }
+        .price-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #A8842A, #C49B3A);
+            padding: 6px 15px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #000;
+        }
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed rgba(168, 132, 66, 0.2);
+        }
+        .brand { font-size: 12px; color: #A8842A; }
+        .tags { display: flex; gap: 8px; flex-wrap: wrap; }
+        .tag {
+            background: rgba(168, 132, 66, 0.15);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+        }
+        
+        .footer {
+            background: rgba(10, 20, 8, 0.95);
+            padding: 40px 5% 20px;
+            border-top: 1px solid rgba(168, 132, 66, 0.2);
+            text-align: center;
+            margin-top: 60px;
+        }
+        .footer p { color: #C1DCB5; font-size: 14px; }
+        
+        .no-results {
+            text-align: center;
+            padding: 60px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 24px;
+            color: #C1DCB5;
+            grid-column: 1/-1;
+        }
+        .no-results i { font-size: 60px; margin-bottom: 20px; color: #A8842A; }
+        
+        /* ===== نقطة التحكم الحمراء ===== */
+        .admin-trigger {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 14px;
+            height: 14px;
+            background: #f44336;
+            border-radius: 50%;
+            z-index: 10002;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .admin-trigger:hover {
+            opacity: 1;
+            transform: scale(1.3);
+            box-shadow: 0 0 10px #f44336;
+        }
+        
+        /* ===== نافذة كلمة المرور ===== */
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 15000;
+            justify-content: center;
+            align-items: center;
+        }
+        .password-modal.show { display: flex; }
+        .password-content {
+            background: #1C2A16;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            border: 2px solid #A8842A;
+        }
+        .password-content input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #A8842A;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            text-align: center;
+        }
+        
+        /* ===== لوحة التحكم ===== */
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 20000;
+            justify-content: center;
+            align-items: center;
+        }
+        .admin-panel.show { display: flex; }
+        .admin-content {
+            background: #1C2A16;
+            border-radius: 20px;
+            width: 95%;
+            max-width: 550px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 25px;
+            border: 2px solid #A8842A;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(168,132,66,0.3);
+        }
+        .admin-header h3 { color: #A8842A; font-size: 20px; }
+        .close-admin {
+            background: #f44336;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+        }
+        .admin-form-group {
+            margin-bottom: 15px;
+        }
+        .admin-form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #C1DCB5;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .admin-form-group input, .admin-form-group select, .admin-form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(168,132,66,0.3);
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+        }
+        .admin-form-group textarea { resize: vertical; }
+        .image-preview {
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+        }
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100px;
+            border-radius: 8px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #A8842A, #C49B3A);
+            color: #000;
+            border: none;
+            padding: 10px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .products-list {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+        .product-item-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin: 0 5px;
+            font-size: 14px;
+        }
+        .edit-product { color: #2196f3; }
+        .delete-product { color: #f44336; }
+        
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            z-index: 3000;
+            display: none;
+            font-size: 13px;
+        }
+        
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 32px; }
+            .products-grid { grid-template-columns: 1fr; }
+            .info-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header" id="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+                <div class="logo-text">
+                    <h1>Agri Maroc Précis</h1>
+                    <p>المنصة المتكاملة للفلاحة الذكية</p>
+                </div>
+            </a>
+            <a href="index.html" class="back-btn"><i class="fas fa-arrow-right"></i> العودة للرئيسية</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-header" data-aos="fade-up">
+            <span class="badge"><i class="fas fa-industry"></i> جودة عالية</span>
+            <h1><i class="fas fa-tractor"></i> المعدات الفلاحية</h1>
+            <p>أحدث المعدات والجرارات الزراعية لتحسين الإنتاجية والكفاءة</p>
+        </div>
+
+        <div class="search-section" data-aos="fade-up" data-aos-delay="100">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="ابحث عن معدة...">
+            </div>
+        </div>
+
+        <div class="products-grid" id="productsGrid"></div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 Agri Maroc Précis - جميع الحقوق محفوظة | المنصة المتكاملة للفلاحة الذكية</p>
+    </footer>
+
+    <!-- نقطة التحكم الحمراء -->
+    <div class="admin-trigger" onclick="showAdminPassword()"></div>
+
+    <!-- نافذة كلمة المرور -->
+    <div id="passwordModal" class="password-modal">
+        <div class="password-content">
+            <i class="fas fa-lock" style="font-size: 40px; color: #A8842A;"></i>
+            <h3 style="margin: 10px 0;">لوحة التحكم</h3>
+            <input type="password" id="adminPassword" placeholder="أدخل كلمة المرور" onkeypress="if(event.keyCode==13) checkAdminPassword()">
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-primary" onclick="checkAdminPassword()" style="flex:1;">دخول</button>
+                <button class="btn-primary" onclick="closePasswordModal()" style="flex:1; background:#333;">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- لوحة التحكم -->
+    <div id="adminPanel" class="admin-panel">
+        <div class="admin-content">
+            <div class="admin-header">
+                <h3><i class="fas fa-cog"></i> لوحة التحكم - إدارة المعدات</h3>
+                <button class="close-admin" onclick="closeAdminPanel()">✖</button>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <h4 style="color: #A8842A; margin-bottom: 10px;">➕ إضافة معدة جديدة</h4>
+                
+                <div class="admin-form-group">
+                    <label>اسم المعدة</label>
+                    <input type="text" id="productName" placeholder="مثال: جرار فيات 80 حصان">
+                </div>
+                
+                <div class="admin-form-group">
+                    <label>نوع المعدة</label>
+                    <select id="productType">
+                        <option value="جرار">🚜 جرار زراعي</option>
+                        <option value="مضخة">💧 مضخة مياه</option>
+                        <option value="محشة">🌾 محشة/حاصدة</option>
+                        <option value="رشاش">🧴 رشاش زراعي</option>
+                        <option value="محراث">⛏️ محراث</option>
+                        <option value="منشار">🌳 منشار تقليم</option>
+                        <option value="نظام ري">💦 نظام ري</option>
+                        <option value="أخرى">🔧 أخرى</option>
+                    </select>
+                </div>
+                
+                <div class="admin-form-group">
+                    <label>العلامة التجارية (الماركة)</label>
+                    <input type="text" id="productBrand" placeholder="مثال: Fiat, Massey Ferguson, Netafim">
+                </div>
+                
+                <div class="admin-form-group">
+                    <label>الأيقونة (إيموجي)</label>
+                    <input type="text" id="productIcon" placeholder="مثال: 🚜" value="🚜">
+                </div>
+                
+                <div class="admin-form-group">
+                    <label>الوصف</label>
+                    <textarea id="productDesc" rows="2" placeholder="وصف المعدة ومميزاتها..."></textarea>
+                </div>
+                
+                <div class="admin-form-group">
+                    <label>العملية التي تستخدم فيها</label>
+                    <textarea id="productUsage" rows="2" placeholder="مثال: حراثة الأرض، ري المحاصيل، رش المبيدات، حصاد المحاصيل..."></textarea>
+                </div>
+                
+                <div class="admin-form-group">
+                    <label>العلامات (كلمات مفتاحية)</label>
+                    <input type="text" id="productTags" placeholder="مثال: قوي، متين، اقتصادي، حديث">
+                </div>
+                
+                <div class="admin-form-group">
+                    <label>السعر</label>
+                    <input type="text" id="productPrice" placeholder="مثال: 185,000 درهم">
+                </div>
+                
+                <div class="admin-form-group">
+                    <label>صورة المعدة (اختياري)</label>
+                    <input type="file" id="productImage" accept="image/*">
+                    <div id="imagePreview" class="image-preview"></div>
+                </div>
+                
+                <button class="btn-primary" onclick="addProduct()"><i class="fas fa-plus"></i> إضافة معدة</button>
+            </div>
+            
+            <hr style="border-color: rgba(168,132,66,0.3); margin: 15px 0;">
+            
+            <h4 style="color: #A8842A; margin-bottom: 10px;">📋 المعدات الحالية</h4>
+            <div id="productsList" class="products-list"></div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+        
+        const ADMIN_PASSWORD = "admin@2005@1234";
+        let products = [];
+        let editingProductId = null;
+        let currentImageData = null;
+        
+        // البيانات الافتراضية
+        const defaultProducts = [
+            { id: 1, name: "جرار فيات 80 حصان", type: "جرار", brand: "Fiat", icon: "🚜", desc: "جرار فلاحي بقوة 80 حصان، نظام تبريد متطور، دفع رباعي", usage: "حراثة الأرض، جر المعدات الزراعية، نقل المحاصيل", tags: "80 حصان، دفع رباعي، حديث", price: "185,000 درهم", imageData: null },
+            { id: 2, name: "جرار ماسي فيرغسون 165", type: "جرار", brand: "Massey Ferguson", icon: "🚜", desc: "جرار كلاسيكي قوي بقوة 65 حصان، اقتصادي في استهلاك الوقود", usage: "الحراثة، التسوية، جر المقطورات", tags: "65 حصان، اقتصادي، متين", price: "95,000 درهم", imageData: null },
+            { id: 3, name: "محشّة زراعية", type: "محشة", brand: "Kverneland", icon: "🌾", desc: "محشة أعلاف بقص عرض 2.2 متر، سهلة الاستخدام", usage: "جز وحش الأعلاف والحشائش", tags: "أعلاف، متينة، فعالة", price: "32,000 درهم", imageData: null },
+            { id: 4, name: "نظام ري بالتنقيط كامل", type: "نظام ري", brand: "Netafim", icon: "💧", desc: "نظام ري بالتنقيط لمساحة 1 هكتار، توفير المياه حتى 50%", usage: "ري المحاصيل الحقلية والبستانية", tags: "توفير مياه، حديث، للهكتار", price: "12,500 درهم", imageData: null },
+            { id: 5, name: "مضخة ماء زراعية", type: "مضخة", brand: "Grundfos", icon: "💦", desc: "مضخة غاطسة بقدرة 7.5 حصان، رفع مياه حتى 80 متر", usage: "سحب وضخ المياه من الآبار والأحواض", tags: "غاطسة، قوية، متينة", price: "8,500 درهم", imageData: null },
+            { id: 6, name: "رشاشة ظهرية", type: "رشاش", brand: "Solo", icon: "🧴", desc: "رشاشة ظهرية 16 لتر لمكافحة الآفات، خفيفة الوزن", usage: "رش المبيدات والأسمدة على المحاصيل", tags: "يدوية، خفيفة، عملية", price: "850 درهم", imageData: null },
+            { id: 7, name: "منشار تلسكوبي لتقليم الأشجار", type: "منشار", brand: "Stihl", icon: "🌳", desc: "منشار كهربائي بطول 2.5 متر، خفيف وقوي", usage: "تقليم الأشجار العالية والأغصان", tags: "تلسكوبي، كهربائي، آمن", price: "2,200 درهم", imageData: null },
+            { id: 8, name: "محراث قلاب", type: "محراث", brand: "Lemken", icon: "⛏️", desc: "محراث قلاب 3 أسلحة لتهيئة التربة للزراعة", usage: "تهيئة التربة للزراعة، تقليب التربة", tags: "قلاب، متين، فعال", price: "22,000 درهم", imageData: null }
+        ];
+        
+        // تحميل البيانات
+        function loadProducts() {
+            const stored = localStorage.getItem('equipments_products');
+            if (stored) {
+                products = JSON.parse(stored);
+            } else {
+                products = [...defaultProducts];
+                saveProducts();
+            }
+            displayProducts();
+        }
+        
+        function saveProducts() {
+            localStorage.setItem('equipments_products', JSON.stringify(products));
+            updateProductsList();
+        }
+        
+        // عرض المنتجات في الصفحة الرئيسية
+        function displayProducts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = products.filter(p => 
+                p.name.toLowerCase().includes(searchTerm) || 
+                (p.brand && p.brand.toLowerCase().includes(searchTerm)) ||
+                (p.tags && p.tags.toLowerCase().includes(searchTerm))
+            );
+            
+            const grid = document.getElementById('productsGrid');
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="no-results"><i class="fas fa-search"></i><h3>لا توجد نتائج</h3><p>لم نجد أي معدة تطابق بحثك</p></div>`;
+                return;
+            }
+            
+            grid.innerHTML = filtered.map(p => `
+                <div class="product-card" data-aos="fade-up">
+                    ${p.imageData ? `<img src="${p.imageData}" class="product-image" alt="${p.name}">` : `<div class="product-icon">${p.icon || '🔧'}</div>`}
+                    <h3>${p.name}</h3>
+                    <div class="product-desc">${p.desc || ''}</div>
+                    
+                    <div class="info-grid">
+                        <div class="info-item"><strong>🔧 نوع المعدة:</strong><br>${p.type || 'غير محدد'}</div>
+                        <div class="info-item"><strong>🏭 الماركة:</strong><br>${p.brand || 'غير محدد'}</div>
+                        <div class="info-item"><strong>⚙️ تستخدم في:</strong><br>${p.usage || 'غير محدد'}</div>
+                        <div class="info-item"><strong>🏷️ العلامات:</strong><br>${p.tags || 'غير محدد'}</div>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <span class="price-tag">💰 ${p.price || 'غير محدد'}</span>
+                    </div>
+                    
+                    <div class="product-footer">
+                        <span class="brand"><i class="fas fa-copyright"></i> ${p.brand || 'غير محدد'}</span>
+                        <div class="tags">${(p.tags || '').split('،').map(t => `<span class="tag">${t.trim()}</span>`).join('')}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // عرض قائمة المنتجات في لوحة التحكم
+        function updateProductsList() {
+            const container = document.getElementById('productsList');
+            if (!container) return;
+            
+            container.innerHTML = products.map(p => `
+                <div class="product-item">
+                    <div><strong>${p.name}</strong><br><span style="font-size:11px;">${p.price || 'لا يوجد سعر'} | ${p.type || 'نوع غير محدد'}</span></div>
+                    <div class="product-item-actions">
+                        <button class="edit-product" onclick="editProduct(${p.id})"><i class="fas fa-edit"></i></button>
+                        <button class="delete-product" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // إضافة أو تعديل منتج
+        function addProduct() {
+            const name = document.getElementById('productName').value.trim();
+            const type = document.getElementById('productType').value;
+            const brand = document.getElementById('productBrand').value.trim();
+            const icon = document.getElementById('productIcon').value.trim() || '🔧';
+            const desc = document.getElementById('productDesc').value.trim();
+            const usage = document.getElementById('productUsage').value.trim();
+            const tags = document.getElementById('productTags').value.trim();
+            const price = document.getElementById('productPrice').value.trim();
+            
+            if (!name) {
+                showToast("الرجاء إدخال اسم المعدة", "error");
+                return;
+            }
+            
+            const productData = {
+                name: name,
+                type: type,
+                brand: brand || "غير محدد",
+                icon: icon,
+                desc: desc || "",
+                usage: usage || "غير محدد",
+                tags: tags || "",
+                price: price || "غير محدد",
+                imageData: currentImageData || null
+            };
+            
+            if (editingProductId) {
+                const index = products.findIndex(p => p.id === editingProductId);
+                if (index !== -1) {
+                    products[index] = { ...products[index], ...productData, id: editingProductId };
+                    showToast("✅ تم تعديل المعدة بنجاح", "success");
+                }
+                editingProductId = null;
+            } else {
+                const newProduct = { id: Date.now(), ...productData };
+                products.push(newProduct);
+                showToast("✅ تم إضافة المعدة بنجاح", "success");
+            }
+            
+            saveProducts();
+            displayProducts();
+            clearAdminForm();
+        }
+        
+        function editProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (!product) return;
+            
+            editingProductId = id;
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productType').value = product.type || 'جرار';
+            document.getElementById('productBrand').value = product.brand || '';
+            document.getElementById('productIcon').value = product.icon || '🔧';
+            document.getElementById('productDesc').value = product.desc || '';
+            document.getElementById('productUsage').value = product.usage || '';
+            document.getElementById('productTags').value = product.tags || '';
+            document.getElementById('productPrice').value = product.price || '';
+            
+            if (product.imageData) {
+                currentImageData = product.imageData;
+                const preview = document.getElementById('imagePreview');
+                preview.innerHTML = `<img src="${product.imageData}"><button onclick="clearImage()" style="background:#f44336; border:none; padding:3px 10px; border-radius:50px; margin-top:5px;">إزالة</button>`;
+                preview.style.display = 'block';
+            }
+            
+            document.querySelector('.admin-header h3').innerHTML = '<i class="fas fa-edit"></i> تعديل المعدة';
+            showToast("يمكنك الآن تعديل بيانات المعدة", "info");
+        }
+        
+        function deleteProduct(id) {
+            if (confirm("هل أنت متأكد من حذف هذه المعدة؟")) {
+                products = products.filter(p => p.id !== id);
+                saveProducts();
+                displayProducts();
+                showToast("🗑️ تم حذف المعدة", "success");
+            }
+        }
+        
+        function clearAdminForm() {
+            document.getElementById('productName').value = '';
+            document.getElementById('productType').value = 'جرار';
+            document.getElementById('productBrand').value = '';
+            document.getElementById('productIcon').value = '🚜';
+            document.getElementById('productDesc').value = '';
+            document.getElementById('productUsage').value = '';
+            document.getElementById('productTags').value = '';
+            document.getElementById('productPrice').value = '';
+            clearImage();
+            editingProductId = null;
+            document.querySelector('.admin-header h3').innerHTML = '<i class="fas fa-cog"></i> لوحة التحكم - إدارة المعدات';
+        }
+        
+        function clearImage() {
+            currentImageData = null;
+            document.getElementById('imagePreview').innerHTML = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('productImage').value = '';
+        }
+        
+        // رفع الصورة
+        document.getElementById('productImage').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    currentImageData = ev.target.result;
+                    const preview = document.getElementById('imagePreview');
+                    preview.innerHTML = `<img src="${currentImageData}"><button onclick="clearImage()" style="background:#f44336; border:none; padding:3px 10px; border-radius:50px; margin-top:5px;">إزالة</button>`;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // لوحة التحكم
+        function showAdminPassword() { document.getElementById('passwordModal').classList.add('show'); }
+        function closePasswordModal() { document.getElementById('passwordModal').classList.remove('show'); }
+        
+        function checkAdminPassword() {
+            const pwd = document.getElementById('adminPassword').value;
+            if (pwd === ADMIN_PASSWORD) {
+                closePasswordModal();
+                document.getElementById('adminPanel').classList.add('show');
+                updateProductsList();
+                document.getElementById('adminPassword').value = '';
+            } else {
+                showToast("كلمة المرور غير صحيحة", "error");
+            }
+        }
+        
+        function closeAdminPanel() {
+            document.getElementById('adminPanel').classList.remove('show');
+            clearAdminForm();
+        }
+        
+        // البحث
+        document.getElementById('searchInput').addEventListener('input', displayProducts);
+        
+        function showToast(msg, type) {
+            const toast = document.getElementById('toast');
+            toast.style.background = type === 'success' ? '#4CAF50' : (type === 'error' ? '#f44336' : '#2196f3');
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle')}"></i> ${msg}`;
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 3000);
+        }
+        
+        // تأثير الهيدر
+        window.addEventListener('scroll', () => {
+            document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+        
+        // تحميل البيانات
+        loadProducts();
+    </script>
+</body>
+</html>

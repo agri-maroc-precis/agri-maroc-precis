@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>أوقات شروق وغروب الشمس | Agri Maroc Précis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0A1408 0%, #0F1E0C 50%, #1A2A14 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        /* تخصيص شريط التمرير */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1C2A16; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #A8842A; border-radius: 10px; }
+
+        /* الهيدر */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 15px 5%;
+            background: rgba(10, 20, 8, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(168, 132, 66, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .header.scrolled {
+            padding: 10px 5%;
+            background: rgba(10, 20, 8, 0.98);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+
+        .logo:hover {
+            transform: scale(1.02);
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #A8842A, #D4A843);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 0 20px rgba(168, 132, 66, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(168, 132, 66, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(168, 132, 66, 0); }
+        }
+
+        .logo-text h1 {
+            font-size: 20px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #A8842A);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text p {
+            font-size: 10px;
+            color: #C1DCB5;
+        }
+
+        .back-btn {
+            background: rgba(168, 132, 66, 0.15);
+            border: 1px solid rgba(168, 132, 66, 0.5);
+            padding: 10px 25px;
+            border-radius: 50px;
+            color: #A8842A;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: #A8842A;
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(168, 132, 66, 0.3);
+        }
+
+        /* المحتوى الرئيسي */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 130px 20px 60px;
+        }
+
+        /* عنوان الصفحة */
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-header .badge {
+            display: inline-block;
+            background: rgba(168, 132, 66, 0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(168, 132, 66, 0.5);
+        }
+
+        .page-header h1 {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #A8842A, #C1DCB5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+
+        .page-header p {
+            color: #C1DCB5;
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* تاريخ اليوم */
+        .date-info {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 12px 25px;
+            background: rgba(168, 132, 66, 0.1);
+            border-radius: 50px;
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 16px;
+            color: #A8842A;
+            border: 1px solid rgba(168, 132, 66, 0.2);
+        }
+
+        /* اختيار المدينة */
+        .city-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .city-label {
+            display: block;
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: #C1DCB5;
+        }
+
+        .city-selector {
+            max-width: 350px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .city-selector select {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(168, 132, 66, 0.4);
+            border-radius: 60px;
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            appearance: none;
+            transition: all 0.3s;
+        }
+
+        .city-selector select:focus {
+            outline: none;
+            border-color: #A8842A;
+            box-shadow: 0 0 15px rgba(168, 132, 66, 0.2);
+        }
+
+        .city-selector::after {
+            content: '\f0d7';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #A8842A;
+            pointer-events: none;
+        }
+
+        /* البطاقة الرئيسية */
+        .sun-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(15px);
+            border-radius: 48px;
+            padding: 45px 35px;
+            border: 1px solid rgba(168, 132, 66, 0.25);
+            text-align: center;
+            transition: all 0.4s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .sun-card:hover {
+            border-color: #A8842A;
+            transform: translateY(-5px);
+        }
+
+        /* رسم الشمس المتحرك */
+        .sun-animation {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .sun-circle {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border-radius: 50%;
+            margin: 0 auto;
+            position: relative;
+            animation: rotate 20s linear infinite;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .sun-circle::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.2), transparent);
+            animation: pulse-sun 2s infinite;
+        }
+
+        @keyframes pulse-sun {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        .sun-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: #FFD700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .city-name {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 30px;
+            color: #A8842A;
+        }
+
+        /* شبكة الأوقات */
+        .times-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .time-box {
+            background: linear-gradient(135deg, rgba(168, 132, 66, 0.15), rgba(168, 132, 66, 0.05));
+            border-radius: 28px;
+            padding: 25px 20px;
+            transition: all 0.3s;
+            border: 1px solid rgba(168, 132, 66, 0.15);
+        }
+
+        .time-box:hover {
+            transform: scale(1.02);
+            border-color: rgba(168, 132, 66, 0.4);
+        }
+
+        .time-label {
+            font-size: 16px;
+            color: #C1DCB5;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .time-label i {
+            font-size: 20px;
+            color: #A8842A;
+        }
+
+        .time-value {
+            font-size: 48px;
+            font-weight: 800;
+            color: #A8842A;
+            letter-spacing: 2px;
+        }
+
+        /* مدة النهار */
+        .day-duration {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px dashed rgba(168, 132, 66, 0.3);
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .day-duration i {
+            font-size: 22px;
+            color: #A8842A;
+        }
+
+        .day-duration span {
+            color: #A8842A;
+            font-weight: 800;
+            font-size: 20px;
+            margin: 0 5px;
+        }
+
+        /* نصائح */
+        .tips-section {
+            margin-top: 50px;
+            background: rgba(168, 132, 66, 0.08);
+            border-radius: 24px;
+            padding: 30px;
+            border: 1px solid rgba(168, 132, 66, 0.15);
+        }
+
+        .tips-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #A8842A;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .tip-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+
+        .tip-item:hover {
+            background: rgba(168, 132, 66, 0.1);
+            transform: translateX(-5px);
+        }
+
+        .tip-item i {
+            font-size: 20px;
+            color: #A8842A;
+        }
+
+        .tip-item p {
+            font-size: 13px;
+            color: #C1DCB5;
+        }
+
+        /* الفوتر */
+        .footer {
+            background: rgba(10, 20, 8, 0.95);
+            padding: 40px 5% 20px;
+            border-top: 1px solid rgba(168, 132, 66, 0.2);
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .footer p {
+            color: #C1DCB5;
+            font-size: 14px;
+        }
+
+        /* التوافق مع الجوال */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 32px;
+            }
+
+            .times-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .time-value {
+                font-size: 36px;
+            }
+
+            .sun-card {
+                padding: 30px 20px;
+            }
+
+            .city-name {
+                font-size: 22px;
+            }
+
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .time-value {
+                font-size: 28px;
+            }
+
+            .back-btn span {
+                display: none;
+            }
+
+            .back-btn i {
+                margin: 0;
+            }
+
+            .back-btn {
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header" id="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+                <div class="logo-text">
+                    <h1>Agri Maroc Précis</h1>
+                    <p>المنصة المتكاملة للفلاحة الذكية</p>
+                </div>
+            </a>
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-right"></i>
+                <span>العودة للرئيسية</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-header" data-aos="fade-up">
+            <span class="badge">
+                <i class="fas fa-sun"></i> مواعيد دقيقة
+            </span>
+            <h1><i class="fas fa-sun"></i> أوقات شروق وغروب الشمس</h1>
+            <p>تعرف على مواعيد شروق وغروب الشمس حسب منطقتك لتنظيم مواعيد الري والعمل الزراعي</p>
+        </div>
+
+        <div style="text-align: center;" data-aos="fade-up" data-aos-delay="100">
+            <div class="date-info" id="currentDate">
+                <i class="fas fa-calendar-alt"></i> جاري التحميل...
+            </div>
+        </div>
+
+        <div class="city-section" data-aos="fade-up" data-aos-delay="150">
+            <div class="city-label">
+                <i class="fas fa-map-marker-alt"></i> اختر مدينتك
+            </div>
+            <div class="city-selector">
+                <select id="citySelect">
+                    <option value="casablanca">🌆 الدار البيضاء</option>
+                    <option value="rabat">🏛️ الرباط</option>
+                    <option value="marrakech">🌴 مراكش</option>
+                    <option value="fes">🏰 فاس</option>
+                    <option value="tangier">🌊 طنجة</option>
+                    <option value="agadir">🏖️ أكادير</option>
+                    <option value="oujda">🌅 وجدة</option>
+                    <option value="meknes">🏯 مكناس</option>
+                    <option value="tetouan">⛰️ تطوان</option>
+                    <option value="essaouira">🎨 الصويرة</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="sun-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="sun-animation">
+                <div class="sun-circle"></div>
+            </div>
+            <div class="city-name" id="cityName">
+                الدار البيضاء
+            </div>
+
+            <div class="times-grid">
+                <div class="time-box">
+                    <div class="time-label">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>وقت الشروق</span>
+                    </div>
+                    <div class="time-value" id="sunriseTime">--:--</div>
+                </div>
+                <div class="time-box">
+                    <div class="time-label">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>وقت الغروب</span>
+                    </div>
+                    <div class="time-value" id="sunsetTime">--:--</div>
+                </div>
+            </div>
+
+            <div class="day-duration">
+                <i class="fas fa-hourglass-half"></i>
+                <span>مدة النهار:</span>
+                <span id="dayDuration">--</span>
+            </div>
+        </div>
+
+        <!-- نصائح زراعية -->
+        <div class="tips-section" data-aos="fade-up" data-aos-delay="250">
+            <div class="tips-title">
+                <i class="fas fa-lightbulb"></i> نصائح زراعية حسب الوقت
+            </div>
+            <div class="tips-grid">
+                <div class="tip-item">
+                    <i class="fas fa-tint"></i>
+                    <p>🌅 أفضل وقت للري هو بعد شروق الشمس مباشرة أو قبل الغروب لتقليل التبخر</p>
+                </div>
+                <div class="tip-item">
+                    <i class="fas fa-leaf"></i>
+                    <p>☀️ تجنب رش المبيدات في منتصف النهار لتجنب حرق النباتات</p>
+                </div>
+                <div class="tip-item">
+                    <i class="fas fa-tractor"></i>
+                    <p>🚜 أنسب وقت للعمل في الحقول هو الصباح الباكر أو بعد العصر</p>
+                </div>
+                <div class="tip-item">
+                    <i class="fas fa-cloud-sun"></i>
+                    <p>🌿 مراقبة ساعات النهار تساعد في تحديد مواعيد الزراعة المناسبة لكل محصول</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 Agri Maroc Précis - جميع الحقوق محفوظة | المنصة المتكاملة للفلاحة الذكية</p>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+
+        // بيانات أوقات الشروق والغروب (تقريبية لكل مدينة)
+        const sunTimes = {
+            casablanca: { name: "الدار البيضاء", sunrise: "06:45", sunset: "20:15" },
+            rabat: { name: "الرباط", sunrise: "06:42", sunset: "20:18" },
+            marrakech: { name: "مراكش", sunrise: "06:55", sunset: "20:05" },
+            fes: { name: "فاس", sunrise: "06:38", sunset: "20:22" },
+            tangier: { name: "طنجة", sunrise: "06:35", sunset: "20:25" },
+            agadir: { name: "أكادير", sunrise: "07:05", sunset: "19:58" },
+            oujda: { name: "وجدة", sunrise: "06:30", sunset: "20:20" },
+            meknes: { name: "مكناس", sunrise: "06:40", sunset: "20:20" },
+            tetouan: { name: "تطوان", sunrise: "06:33", sunset: "20:27" },
+            essaouira: { name: "الصويرة", sunrise: "07:10", sunset: "19:55" }
+        };
+
+        // تنسيق التاريخ بالعربية
+        function formatDate() {
+            const date = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            return date.toLocaleDateString('ar-EG', options);
+        }
+
+        // حساب مدة النهار
+        function calculateDayDuration(sunrise, sunset) {
+            const [sunriseHour, sunriseMin] = sunrise.split(':').map(Number);
+            const [sunsetHour, sunsetMin] = sunset.split(':').map(Number);
+            
+            let durationHours = sunsetHour - sunriseHour;
+            let durationMins = sunsetMin - sunriseMin;
+            
+            if (durationMins < 0) {
+                durationHours--;
+                durationMins += 60;
+            }
+            
+            return `${durationHours} ساعة و ${durationMins} دقيقة`;
+        }
+
+        // تحديث الأوقات عند تغيير المدينة
+        function updateTimes() {
+            const city = document.getElementById('citySelect').value;
+            const data = sunTimes[city];
+            
+            if (data) {
+                document.getElementById('cityName').innerText = data.name;
+                document.getElementById('sunriseTime').innerText = data.sunrise;
+                document.getElementById('sunsetTime').innerText = data.sunset;
+                const duration = calculateDayDuration(data.sunrise, data.sunset);
+                document.getElementById('dayDuration').innerHTML = duration;
+            }
+        }
+
+        // تغيير الخلفية حسب الوقت
+        function updateBackgroundByTime() {
+            const now = new Date();
+            const hour = now.getHours();
+            const body = document.body;
+            
+            if (hour >= 5 && hour < 8) {
+                // وقت الشروق
+                body.style.background = "linear-gradient(135deg, #FF7E5F, #FEB47B)";
+            } else if (hour >= 8 && hour < 18) {
+                // وقت النهار
+                body.style.background = "linear-gradient(135deg, #0A1408 0%, #0F1E0C 50%, #1A2A14 100%)";
+            } else if (hour >= 18 && hour < 20) {
+                // وقت الغروب
+                body.style.background = "linear-gradient(135deg, #FF512F, #DD2475)";
+            } else {
+                // وقت الليل
+                body.style.background = "linear-gradient(135deg, #0F0C29, #302B63, #24243E)";
+            }
+        }
+
+        // عرض التاريخ
+        document.getElementById('currentDate').innerHTML = `<i class="fas fa-calendar-alt"></i> ${formatDate()}`;
+        
+        // تعيين المستمع لتغيير المدينة
+        document.getElementById('citySelect').addEventListener('change', updateTimes);
+        
+        // التحديث الأولي
+        updateTimes();
+        
+        // تأثير التمرير على الهيدر
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدورات الزراعية | Agri Maroc Précis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0A1408 0%, #1A2A14 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1C2A16; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #A8842A; border-radius: 10px; }
+        
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 15px 5%;
+            background: rgba(10, 20, 8, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(168, 132, 66, 0.3);
+            transition: all 0.3s ease;
+        }
+        .header.scrolled { padding: 10px 5%; background: rgba(10, 20, 8, 0.98); }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+        .logo:hover { transform: scale(1.02); }
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #A8842A, #D4A843);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 0 20px rgba(168, 132, 66, 0.3);
+        }
+        .logo-text h1 {
+            font-size: 20px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #A8842A);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .logo-text p { font-size: 10px; color: #C1DCB5; }
+        .back-btn {
+            background: rgba(168, 132, 66, 0.15);
+            border: 1px solid rgba(168, 132, 66, 0.5);
+            padding: 10px 25px;
+            border-radius: 50px;
+            color: #A8842A;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .back-btn:hover {
+            background: #A8842A;
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(168, 132, 66, 0.3);
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 130px 20px 60px; }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .page-header .badge {
+            display: inline-block;
+            background: rgba(168, 132, 66, 0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(168, 132, 66, 0.5);
+        }
+        .page-header h1 {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #A8842A, #C1DCB5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+        .page-header p { color: #C1DCB5; font-size: 18px; max-width: 600px; margin: 0 auto; }
+        
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 30px;
+        }
+        
+        .course-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(168, 132, 66, 0.2);
+            cursor: pointer;
+        }
+        .course-card:hover {
+            transform: translateY(-8px);
+            border-color: #A8842A;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .course-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .course-field {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #A8842A;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .course-content {
+            padding: 20px;
+        }
+        .course-date {
+            font-size: 12px;
+            color: #A8842A;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .course-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        .course-desc {
+            font-size: 13px;
+            color: #C1DCB5;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .view-details {
+            color: #A8842A;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: gap 0.3s;
+        }
+        .view-details:hover { gap: 10px; }
+        
+        .footer {
+            background: rgba(10, 20, 8, 0.95);
+            padding: 40px 5% 20px;
+            border-top: 1px solid rgba(168, 132, 66, 0.2);
+            text-align: center;
+            margin-top: 60px;
+        }
+        .footer p { color: #C1DCB5; font-size: 14px; }
+        
+        /* ===== نقطة التحكم الحمراء ===== */
+        .admin-trigger {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 14px;
+            height: 14px;
+            background: #f44336;
+            border-radius: 50%;
+            z-index: 10002;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .admin-trigger:hover {
+            opacity: 1;
+            transform: scale(1.3);
+            box-shadow: 0 0 10px #f44336;
+        }
+        
+        /* ===== نافذة كلمة المرور ===== */
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 15000;
+            justify-content: center;
+            align-items: center;
+        }
+        .password-modal.show { display: flex; }
+        .password-content {
+            background: #1C2A16;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            border: 2px solid #A8842A;
+        }
+        .password-content input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #A8842A;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            text-align: center;
+        }
+        
+        /* ===== لوحة التحكم ===== */
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 20000;
+            justify-content: center;
+            align-items: center;
+        }
+        .admin-panel.show { display: flex; }
+        .admin-content {
+            background: #1C2A16;
+            border-radius: 20px;
+            width: 95%;
+            max-width: 750px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 25px;
+            border: 2px solid #A8842A;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(168,132,66,0.3);
+        }
+        .admin-header h3 { color: #A8842A; font-size: 20px; }
+        .close-admin {
+            background: #f44336;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+        }
+        .admin-form-group {
+            margin-bottom: 15px;
+        }
+        .admin-form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #C1DCB5;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .admin-form-group input, .admin-form-group select, .admin-form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(168,132,66,0.3);
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+        }
+        .admin-form-group textarea { resize: vertical; }
+        .image-preview {
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+        }
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100px;
+            border-radius: 8px;
+        }
+        .images-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .images-preview img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #A8842A, #C49B3A);
+            color: #000;
+            border: none;
+            padding: 10px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .courses-list {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .course-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+        .course-item-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin: 0 5px;
+            font-size: 14px;
+        }
+        .edit-course { color: #2196f3; }
+        .delete-course { color: #f44336; }
+        
+        /* ===== صفحة عرض الدورة كاملة ===== */
+        .course-detail-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.98);
+            z-index: 25000;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+        }
+        .course-detail-modal.show { display: flex; }
+        .course-detail-content {
+            background: #1C2A16;
+            border-radius: 24px;
+            width: 95%;
+            max-width: 950px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+            border: 2px solid #A8842A;
+            margin: 20px;
+        }
+        .detail-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .detail-field {
+            display: inline-block;
+            background: #A8842A;
+            color: #000;
+            padding: 5px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .detail-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+        .detail-date {
+            color: #A8842A;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .detail-cover {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 16px;
+            margin-bottom: 25px;
+        }
+        .detail-desc {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            color: #C1DCB5;
+        }
+        .detail-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .detail-images img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        .section-title {
+            font-size: 20px;
+            color: #A8842A;
+            margin: 20px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(168,132,66,0.3);
+        }
+        .resource-item {
+            background: rgba(0,0,0,0.3);
+            padding: 12px;
+            border-radius: 12px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .resource-item a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .close-detail {
+            background: #A8842A;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            z-index: 3000;
+            display: none;
+            font-size: 13px;
+        }
+        
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 32px; }
+            .courses-grid { grid-template-columns: 1fr; }
+            .detail-title { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header" id="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+                <div class="logo-text">
+                    <h1>Agri Maroc Précis</h1>
+                    <p>المنصة المتكاملة للفلاحة الذكية</p>
+                </div>
+            </a>
+            <a href="index.html" class="back-btn"><i class="fas fa-arrow-right"></i> العودة للرئيسية</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-header" data-aos="fade-up">
+            <span class="badge"><i class="fas fa-graduation-cap"></i> تعلم مع الخبراء</span>
+            <h1><i class="fas fa-graduation-cap"></i> الدورات الزراعية</h1>
+            <p>دورات تدريبية متخصصة في المجال الفلاحي مع شهادات معتمدة</p>
+        </div>
+
+        <div class="courses-grid" id="coursesGrid"></div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 Agri Maroc Précis - جميع الحقوق محفوظة | المنصة المتكاملة للفلاحة الذكية</p>
+    </footer>
+
+    <!-- نقطة التحكم الحمراء -->
+    <div class="admin-trigger" onclick="showAdminPassword()"></div>
+
+    <!-- نافذة كلمة المرور -->
+    <div id="passwordModal" class="password-modal">
+        <div class="password-content">
+            <i class="fas fa-lock" style="font-size: 40px; color: #A8842A;"></i>
+            <h3 style="margin: 10px 0;">لوحة التحكم</h3>
+            <input type="password" id="adminPassword" placeholder="أدخل كلمة المرور" onkeypress="if(event.keyCode==13) checkAdminPassword()">
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-primary" onclick="checkAdminPassword()" style="flex:1;">دخول</button>
+                <button class="btn-primary" onclick="closePasswordModal()" style="flex:1; background:#333;">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- لوحة التحكم -->
+    <div id="adminPanel" class="admin-panel">
+        <div class="admin-content">
+            <div class="admin-header">
+                <h3><i class="fas fa-cog"></i> لوحة التحكم - إدارة الدورات</h3>
+                <button class="close-admin" onclick="closeAdminPanel()">✖</button>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <h4 style="color: #A8842A; margin-bottom: 10px;">➕ إضافة دورة جديدة</h4>
+                
+                <div class="admin-form-group">
+                    <label>عنوان الدورة</label>
+                    <input type="text" id="courseTitle" placeholder="عنوان الدورة">
+                </div>
+                
+                <div class="admin-form-group">
+                    <label>المجال/التخصص</label>
+                    <input type="text" id="courseField" placeholder="مثال: الزراعة الذكية، الري، المكافحة">
+                </div>
+                
+                <div class="admin-form-group">
+                    <label>تاريخ الدورة</label>
+                    <input type="date" id="courseDate">
+                </div>
+                
+                <div class="admin-form-group">
+                    <label>وصف الدورة</label>
+                    <textarea id="courseDesc" rows="3" placeholder="وصف تفصيلي للدورة"></textarea>
+                </div>
+                
+                <div class="admin-form-group">
+                    <label>صورة الغلاف</label>
+                    <input type="file" id="coverImage" accept="image/*">
+                    <div id="coverPreview" class="image-preview"></div>
+                </div>
+                
+                <div class="admin-form-group">
+                    <label>صور إضافية للدورة (يمكن اختيار عدة صور)</label>
+                    <input type="file" id="courseImages" accept="image/*" multiple>
+                    <div id="imagesPreview" class="images-preview"></div>
+                </div>
+                
+                <div class="admin-form-group">
+                    <label>فيديو (رابط YouTube أو ملف فيديو)</label>
+                    <input type="text" id="courseVideo" placeholder="رابط الفيديو">
+                </div>
+                
+                <div class="admin-form-group">
+                    <label>ملف PDF</label>
+                    <input type="file" id="coursePdf" accept=".pdf">
+                    <div id="pdfPreview" class="image-preview"></div>
+                </div>
+                
+                <div class="admin-form-group">
+                    <label>ملف PowerPoint (بوربونت)</label>
+                    <input type="file" id="coursePpt" accept=".pptx,.ppt">
+                    <div id="pptPreview" class="image-preview"></div>
+                </div>
+                
+                <div class="admin-form-group">
+                    <label>رابط جوجل درايف</label>
+                    <input type="text" id="googleDriveLink" placeholder="https://drive.google.com/...">
+                </div>
+                
+                <div class="admin-form-group">
+                    <label>روابط فيديوهات عامة من الإنترنت (رابط لكل سطر)</label>
+                    <textarea id="videoLinks" rows="2" placeholder="https://youtube.com/...&#10;https://vimeo.com/..."></textarea>
+                </div>
+                
+                <div class="admin-form-group">
+                    <label>دورات ومصادر إضافية (رابط لكل سطر)</label>
+                    <textarea id="extraResources" rows="2" placeholder="https://example.com/course1&#10;https://example.com/resource2"></textarea>
+                </div>
+                
+                <button class="btn-primary" onclick="addCourse()"><i class="fas fa-plus"></i> نشر الدورة</button>
+            </div>
+            
+            <hr style="border-color: rgba(168,132,66,0.3); margin: 15px 0;">
+            
+            <h4 style="color: #A8842A; margin-bottom: 10px;">📋 الدورات المنشورة</h4>
+            <div id="coursesList" class="courses-list"></div>
+        </div>
+    </div>
+
+    <!-- نافذة عرض الدورة كاملة -->
+    <div id="courseDetailModal" class="course-detail-modal">
+        <div class="course-detail-content" id="courseDetailContent"></div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+        
+        const ADMIN_PASSWORD = "admin@2005@1234";
+        let courses = [];
+        let editingCourseId = null;
+        let currentCoverImage = null;
+        let currentImagesList = [];
+        let currentPdfFile = null;
+        let currentPptFile = null;
+        
+        // البيانات الافتراضية
+        const defaultCourses = [
+            { id: 1, title: "الزراعة الذكية باستخدام الذكاء الاصطناعي", field: "تكنولوجيا زراعية", date: "2026-05-15", desc: "تعلم كيفية استخدام الذكاء الاصطناعي في تحسين الإنتاج الزراعي ومراقبة المحاصيل", coverImage: "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg", images: [], video: "", pdfFile: "", pptFile: "", googleDrive: "", videoLinks: "", extraResources: "" },
+            { id: 2, title: "إدارة نظم الري الحديثة", field: "إدارة المياه", date: "2026-05-20", desc: "تقنيات الري بالتنقيط والرش، وكيفية ترشيد استهلاك المياه", coverImage: "https://images.pexels.com/photos/235725/pexels-photo-235725.jpeg", images: [], video: "", pdfFile: "", pptFile: "", googleDrive: "", videoLinks: "", extraResources: "" },
+            { id: 3, title: "مكافحة الآفات الزراعية", field: "وقاية النبات", date: "2026-05-25", desc: "التعرف على الآفات وطرق المكافحة المتكاملة", coverImage: "https://images.pexels.com/photos/1337380/pexels-photo-1337380.jpeg", images: [], video: "", pdfFile: "", pptFile: "", googleDrive: "", videoLinks: "", extraResources: "" }
+        ];
+        
+        // تحميل البيانات
+        function loadCourses() {
+            const stored = localStorage.getItem('agriculture_courses');
+            if (stored) {
+                courses = JSON.parse(stored);
+            } else {
+                courses = [...defaultCourses];
+                saveCourses();
+            }
+            displayCourses();
+        }
+        
+        function saveCourses() {
+            localStorage.setItem('agriculture_courses', JSON.stringify(courses));
+            updateCoursesList();
+        }
+        
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+        
+        // عرض الدورات في الصفحة الرئيسية
+        function displayCourses() {
+            const grid = document.getElementById('coursesGrid');
+            
+            if (courses.length === 0) {
+                grid.innerHTML = `<div class="no-results" style="grid-column: 1/-1; text-align:center; padding:60px;"><i class="fas fa-graduation-cap" style="font-size:60px;"></i><h3>لا توجد دورات</h3></div>`;
+                return;
+            }
+            
+            grid.innerHTML = courses.map(c => `
+                <div class="course-card" data-aos="fade-up" onclick="showCourseDetail(${c.id})">
+                    <div class="course-image" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('${c.coverImage}');">
+                        <span class="course-field">📚 ${c.field}</span>
+                    </div>
+                    <div class="course-content">
+                        <div class="course-date"><i class="fas fa-calendar-alt"></i> ${formatDate(c.date)}</div>
+                        <h3>${c.title}</h3>
+                        <div class="course-desc">${c.desc.substring(0, 100)}...</div>
+                        <span class="view-details">عرض التفاصيل <i class="fas fa-arrow-left"></i></span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // عرض تفاصيل الدورة في نافذة منفصلة
+        function showCourseDetail(id) {
+            const course = courses.find(c => c.id === id);
+            if (!course) return;
+            
+            let imagesHtml = '';
+            if (course.images && course.images.length > 0) {
+                imagesHtml = `<div class="detail-images">${course.images.map(img => `<img src="${img}" alt="صورة الدورة" onclick="window.open('${img}','_blank')">`).join('')}</div>`;
+            }
+            
+            let videoHtml = '';
+            if (course.video) {
+                if (course.video.includes('youtube.com') || course.video.includes('youtu.be')) {
+                    let videoId = course.video.split('v=')[1]?.split('&')[0] || course.video.split('/').pop();
+                    videoHtml = `<div class="resource-item"><i class="fab fa-youtube" style="font-size:24px; color:#f44336;"></i><a href="${course.video}" target="_blank">▶ مشاهدة الفيديو</a></div>`;
+                } else {
+                    videoHtml = `<div class="resource-item"><i class="fas fa-video" style="font-size:24px; color:#A8842A;"></i><a href="${course.video}" target="_blank">▶ مشاهدة الفيديو</a></div>`;
+                }
+            }
+            
+            let pdfHtml = '';
+            if (course.pdfFile) {
+                pdfHtml = `<div class="resource-item"><i class="fas fa-file-pdf" style="font-size:24px; color:#f44336;"></i><a href="${course.pdfFile}" target="_blank">📄 تحميل ملف PDF</a></div>`;
+            }
+            
+            let pptHtml = '';
+            if (course.pptFile) {
+                pptHtml = `<div class="resource-item"><i class="fas fa-file-powerpoint" style="font-size:24px; color:#ff9800;"></i><a href="${course.pptFile}" target="_blank">📊 تحميل ملف PowerPoint</a></div>`;
+            }
+            
+            let googleDriveHtml = '';
+            if (course.googleDrive) {
+                googleDriveHtml = `<div class="resource-item"><i class="fab fa-google-drive" style="font-size:24px; color:#4CAF50;"></i><a href="${course.googleDrive}" target="_blank">🔗 رابط جوجل درايف</a></div>`;
+            }
+            
+            let videoLinksHtml = '';
+            if (course.videoLinks) {
+                const links = course.videoLinks.split('\n');
+                videoLinksHtml = `<div class="section-title">🎬 روابط فيديوهات إضافية</div>`;
+                links.forEach(l => {
+                    if (l.trim()) videoLinksHtml += `<div class="resource-item"><i class="fas fa-play-circle" style="color:#A8842A;"></i><a href="${l}" target="_blank">${l}</a></div>`;
+                });
+            }
+            
+            let extraResourcesHtml = '';
+            if (course.extraResources) {
+                const resources = course.extraResources.split('\n');
+                extraResourcesHtml = `<div class="section-title">📚 دورات ومصادر إضافية</div>`;
+                resources.forEach(r => {
+                    if (r.trim()) extraResourcesHtml += `<div class="resource-item"><i class="fas fa-link" style="color:#4CAF50;"></i><a href="${r}" target="_blank">${r}</a></div>`;
+                });
+            }
+            
+            const detailHtml = `
+                <div class="detail-header">
+                    <span class="detail-field">📚 ${course.field}</span>
+                    <h1 class="detail-title">${course.title}</h1>
+                    <div class="detail-date"><i class="fas fa-calendar-alt"></i> ${formatDate(course.date)}</div>
+                </div>
+                <img src="${course.coverImage}" class="detail-cover" alt="صورة الغلاف">
+                <div class="detail-desc">${course.desc}</div>
+                ${imagesHtml}
+                ${videoHtml}
+                ${pdfHtml}
+                ${pptHtml}
+                ${googleDriveHtml}
+                ${videoLinksHtml}
+                ${extraResourcesHtml}
+                <button class="close-detail" onclick="closeCourseDetail()">✖ إغلاق</button>
+            `;
+            
+            document.getElementById('courseDetailContent').innerHTML = detailHtml;
+            document.getElementById('courseDetailModal').classList.add('show');
+        }
+        
+        function closeCourseDetail() {
+            document.getElementById('courseDetailModal').classList.remove('show');
+        }
+        
+        // عرض قائمة الدورات في لوحة التحكم
+        function updateCoursesList() {
+            const container = document.getElementById('coursesList');
+            if (!container) return;
+            
+            container.innerHTML = courses.map(c => `
+                <div class="course-item">
+                    <div><strong>${c.title}</strong><br><span style="font-size:11px;">${formatDate(c.date)} | ${c.field}</span></div>
+                    <div class="course-item-actions">
+                        <button class="edit-course" onclick="editCourse(${c.id})"><i class="fas fa-edit"></i></button>
+                        <button class="delete-course" onclick="deleteCourse(${c.id})"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // إضافة أو تعديل دورة
+        function addCourse() {
+            const title = document.getElementById('courseTitle').value.trim();
+            const field = document.getElementById('courseField').value.trim();
+            const date = document.getElementById('courseDate').value;
+            const desc = document.getElementById('courseDesc').value.trim();
+            const video = document.getElementById('courseVideo').value.trim();
+            const googleDrive = document.getElementById('googleDriveLink').value.trim();
+            const videoLinks = document.getElementById('videoLinks').value.trim();
+            const extraResources = document.getElementById('extraResources').value.trim();
+            
+            if (!title) {
+                showToast("الرجاء إدخال عنوان الدورة", "error");
+                return;
+            }
+            if (!date) {
+                showToast("الرجاء اختيار تاريخ الدورة", "error");
+                return;
+            }
+            if (!currentCoverImage && !editingCourseId) {
+                showToast("الرجاء اختيار صورة الغلاف", "error");
+                return;
+            }
+            
+            const courseData = {
+                title: title,
+                field: field || "غير محدد",
+                date: date,
+                desc: desc || "",
+                coverImage: currentCoverImage || (editingCourseId ? courses.find(c => c.id === editingCourseId)?.coverImage : ''),
+                images: currentImagesList,
+                video: video,
+                pdfFile: currentPdfFile || (editingCourseId ? courses.find(c => c.id === editingCourseId)?.pdfFile : ''),
+                pptFile: currentPptFile || (editingCourseId ? courses.find(c => c.id === editingCourseId)?.pptFile : ''),
+                googleDrive: googleDrive,
+                videoLinks: videoLinks,
+                extraResources: extraResources
+            };
+            
+            if (editingCourseId) {
+                const index = courses.findIndex(c => c.id === editingCourseId);
+                if (index !== -1) {
+                    courses[index] = { ...courses[index], ...courseData, id: editingCourseId };
+                    showToast("✅ تم تعديل الدورة بنجاح", "success");
+                }
+                editingCourseId = null;
+            } else {
+                const newCourse = { id: Date.now(), ...courseData };
+                courses.push(newCourse);
+                showToast("✅ تم نشر الدورة بنجاح", "success");
+            }
+            
+            saveCourses();
+            displayCourses();
+            clearAdminForm();
+        }
+        
+        function editCourse(id) {
+            const course = courses.find(c => c.id === id);
+            if (!course) return;
+            
+            editingCourseId = id;
+            document.getElementById('courseTitle').value = course.title;
+            document.getElementById('courseField').value = course.field || '';
+            document.getElementById('courseDate').value = course.date;
+            document.getElementById('courseDesc').value = course.desc || '';
+            document.getElementById('courseVideo').value = course.video || '';
+            document.getElementById('googleDriveLink').value = course.googleDrive || '';
+            document.getElementById('videoLinks').value = course.videoLinks || '';
+            document.getElementById('extraResources').value = course.extraResources || '';
+            
+            if (course.coverImage) {
+                currentCoverImage = course.coverImage;
+                const preview = document.getElementById('coverPreview');
+                preview.innerHTML = `<img src="${course.coverImage}"><button onclick="clearCoverImage()" style="background:#f44336; border:none; padding:3px 10px; border-radius:50px; margin-top:5px;">إزالة</button>`;
+                preview.style.display = 'block';
+            }
+            
+            if (course.images && course.images.length > 0) {
+                currentImagesList = [...course.images];
+                const preview = document.getElementById('imagesPreview');
+                preview.innerHTML = currentImagesList.map(img => `<img src="${img}">`).join('');
+            }
+            
+            if (course.pdfFile) {
+                currentPdfFile = course.pdfFile;
+                const preview = document.getElementById('pdfPreview');
+                preview.innerHTML = `<a href="${course.pdfFile}" target="_blank" style="color:#A8842A;">📄 ملف PDF موجود</a><button onclick="clearPdf()" style="background:#f44336; border:none; padding:3px 10px; border-radius:50px;">إزالة</button>`;
+                preview.style.display = 'block';
+            }
+            
+            if (course.pptFile) {
+                currentPptFile = course.pptFile;
+                const preview = document.getElementById('pptPreview');
+                preview.innerHTML = `<a href="${course.pptFile}" target="_blank" style="color:#A8842A;">📊 ملف PowerPoint موجود</a><button onclick="clearPpt()" style="background:#f44336; border:none; padding:3px 10px; border-radius:50px;">إزالة</button>`;
+                preview.style.display = 'block';
+            }
+            
+            document.querySelector('.admin-header h3').innerHTML = '<i class="fas fa-edit"></i> تعديل الدورة';
+            showToast("يمكنك الآن تعديل بيانات الدورة", "info");
+        }
+        
+        function deleteCourse(id) {
+            if (confirm("هل أنت متأكد من حذف هذه الدورة؟")) {
+                courses = courses.filter(c => c.id !== id);
+                saveCourses();
+                displayCourses();
+                showToast("🗑️ تم حذف الدورة", "success");
+            }
+        }
+        
+        function clearAdminForm() {
+            document.getElementById('courseTitle').value = '';
+            document.getElementById('courseField').value = '';
+            document.getElementById('courseDate').value = '';
+            document.getElementById('courseDesc').value = '';
+            document.getElementById('courseVideo').value = '';
+            document.getElementById('googleDriveLink').value = '';
+            document.getElementById('videoLinks').value = '';
+            document.getElementById('extraResources').value = '';
+            clearCoverImage();
+            clearImages();
+            clearPdf();
+            clearPpt();
+            editingCourseId = null;
+            document.querySelector('.admin-header h3').innerHTML = '<i class="fas fa-cog"></i> لوحة التحكم - إدارة الدورات';
+        }
+        
+        function clearCoverImage() {
+            currentCoverImage = null;
+            document.getElementById('coverPreview').innerHTML = '';
+            document.getElementById('coverPreview').style.display = 'none';
+            document.getElementById('coverImage').value = '';
+        }
+        
+        function clearImages() {
+            currentImagesList = [];
+            document.getElementById('imagesPreview').innerHTML = '';
+            document.getElementById('courseImages').value = '';
+        }
+        
+        function clearPdf() {
+            currentPdfFile = null;
+            document.getElementById('pdfPreview').innerHTML = '';
+            document.getElementById('pdfPreview').style.display = 'none';
+            document.getElementById('coursePdf').value = '';
+        }
+        
+        function clearPpt() {
+            currentPptFile = null;
+            document.getElementById('pptPreview').innerHTML = '';
+            document.getElementById('pptPreview').style.display = 'none';
+            document.getElementById('coursePpt').value = '';
+        }
+        
+        // رفع صورة الغلاف
+        document.getElementById('coverImage').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    currentCoverImage = ev.target.result;
+                    const preview = document.getElementById('coverPreview');
+                    preview.innerHTML = `<img src="${currentCoverImage}"><button onclick="clearCoverImage()" style="background:#f44336; border:none; padding:3px 10px; border-radius:50px; margin-top:5px;">إزالة</button>`;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // رفع صور متعددة
+        document.getElementById('courseImages').addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            files.forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        currentImagesList.push(ev.target.result);
+                        const preview = document.getElementById('imagesPreview');
+                        preview.innerHTML = currentImagesList.map(img => `<img src="${img}">`).join('');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+        
+        // رفع ملف PDF
+        document.getElementById('coursePdf').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file && file.type === 'application/pdf') {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    currentPdfFile = ev.target.result;
+                    const preview = document.getElementById('pdfPreview');
+                    preview.innerHTML = `<a href="${currentPdfFile}" target="_blank" style="color:#A8842A;">📄 ملف PDF مرفوع</a><button onclick="clearPdf()" style="background:#f44336; border:none; padding:3px 10px; border-radius:50px;">إزالة</button>`;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // رفع ملف PowerPoint
+        document.getElementById('coursePpt').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file && (file.type === 'application/vnd.openxmlformats-officedocument.presentationml.presentation' || file.type === 'application/vnd.ms-powerpoint')) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    currentPptFile = ev.target.result;
+                    const preview = document.getElementById('pptPreview');
+                    preview.innerHTML = `<a href="${currentPptFile}" target="_blank" style="color:#A8842A;">📊 ملف PowerPoint مرفوع</a><button onclick="clearPpt()" style="background:#f44336; border:none; padding:3px 10px; border-radius:50px;">إزالة</button>`;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // لوحة التحكم
+        function showAdminPassword() { document.getElementById('passwordModal').classList.add('show'); }
+        function closePasswordModal() { document.getElementById('passwordModal').classList.remove('show'); }
+        
+        function checkAdminPassword() {
+            const pwd = document.getElementById('adminPassword').value;
+            if (pwd === ADMIN_PASSWORD) {
+                closePasswordModal();
+                document.getElementById('adminPanel').classList.add('show');
+                updateCoursesList();
+                document.getElementById('adminPassword').value = '';
+            } else {
+                showToast("كلمة المرور غير صحيحة", "error");
+            }
+        }
+        
+        function closeAdminPanel() {
+            document.getElementById('adminPanel').classList.remove('show');
+            clearAdminForm();
+        }
+        
+        function showToast(msg, type) {
+            const toast = document.getElementById('toast');
+            toast.style.background = type === 'success' ? '#4CAF50' : (type === 'error' ? '#f44336' : '#2196f3');
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle')}"></i> ${msg}`;
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 3000);
+        }
+        
+        // تأثير الهيدر
+        window.addEventListener('scroll', () => {
+            document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+        
+        // تحميل البيانات
+        loadCourses();
+    </script>
+</body>
+</html>

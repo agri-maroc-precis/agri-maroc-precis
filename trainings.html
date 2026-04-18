@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>طلبات التدريب | Agri Maroc Précis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #0A1408 0%, #0F1E0C 50%, #1A2A14 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1C2A16; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #A8842A; border-radius: 10px; }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 15px 5%;
+            background: rgba(10, 20, 8, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(168, 132, 66, 0.3);
+            transition: all 0.3s ease;
+        }
+        .header.scrolled { padding: 10px 5%; background: rgba(10, 20, 8, 0.98); }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+        .logo:hover { transform: scale(1.02); }
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #A8842A, #D4A843);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 0 20px rgba(168, 132, 66, 0.3);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(168, 132, 66, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(168, 132, 66, 0); }
+        }
+        .logo-text h1 {
+            font-size: 20px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #A8842A);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .logo-text p { font-size: 10px; color: #C1DCB5; }
+        .back-btn {
+            background: rgba(168, 132, 66, 0.15);
+            border: 1px solid rgba(168, 132, 66, 0.5);
+            padding: 10px 25px;
+            border-radius: 50px;
+            color: #A8842A;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .back-btn:hover {
+            background: #A8842A;
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(168, 132, 66, 0.3);
+        }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 130px 20px 60px; }
+
+        .page-header { text-align: center; margin-bottom: 40px; }
+        .page-header .badge {
+            display: inline-block;
+            background: rgba(168, 132, 66, 0.2);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(168, 132, 66, 0.5);
+        }
+        .page-header h1 {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #A8842A, #C1DCB5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+        .page-header p { color: #C1DCB5; font-size: 18px; max-width: 600px; margin: 0 auto; }
+
+        .form-section {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(10px);
+            border-radius: 32px;
+            padding: 30px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(168, 132, 66, 0.2);
+        }
+        .form-section h2 {
+            font-size: 24px;
+            margin-bottom: 25px;
+            color: #A8842A;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .form-group { margin-bottom: 15px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #C1DCB5;
+        }
+        .form-group label i { margin-left: 8px; color: #A8842A; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(168, 132, 66, 0.3);
+            border-radius: 16px;
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #A8842A;
+        }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        .file-upload {
+            background: rgba(168, 132, 66, 0.1);
+            border: 1px dashed rgba(168, 132, 66, 0.5);
+            border-radius: 16px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .file-upload:hover { background: rgba(168, 132, 66, 0.2); }
+        .file-upload i { font-size: 24px; margin-bottom: 5px; display: block; }
+        .image-preview {
+            margin-top: 10px;
+            width: 100px;
+            height: 100px;
+            border-radius: 16px;
+            border: 2px dashed rgba(168, 132, 66, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .image-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .pdf-preview {
+            background: rgba(168, 132, 66, 0.1);
+            border-radius: 12px;
+            padding: 8px 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .submit-btn {
+            background: linear-gradient(135deg, #A8842A, #C49B3A);
+            color: #000;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(168, 132, 66, 0.3); }
+
+        .trainings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 25px;
+        }
+        .training-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.4s;
+            border: 1px solid rgba(168, 132, 66, 0.2);
+            cursor: pointer;
+        }
+        .training-card:hover {
+            transform: translateY(-8px);
+            border-color: #A8842A;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        .training-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .training-card:hover .training-image { transform: scale(1.03); }
+        .training-info { padding: 20px; }
+        .training-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #A8842A;
+        }
+        .training-name {
+            font-size: 14px;
+            color: #C1DCB5;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .training-desc {
+            font-size: 13px;
+            color: #C1DCB5;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .training-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed rgba(168, 132, 66, 0.2);
+        }
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            color: #C1DCB5;
+        }
+        .detail-item i { color: #A8842A; }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .status-pending { background: #ff9800; color: #000; }
+        .status-approved { background: #4caf50; color: #fff; }
+        .status-rejected { background: #f44336; color: #fff; }
+        .contact-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 12px;
+            color: #C1DCB5;
+            margin-top: 10px;
+        }
+        .empty-trainings {
+            text-align: center;
+            padding: 80px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 32px;
+            grid-column: 1/-1;
+        }
+        .empty-trainings i { font-size: 70px; margin-bottom: 20px; color: #A8842A; opacity: 0.5; }
+
+        .footer {
+            background: rgba(10, 20, 8, 0.95);
+            padding: 40px 5% 20px;
+            border-top: 1px solid rgba(168, 132, 66, 0.2);
+            text-align: center;
+            margin-top: 60px;
+        }
+        .footer p { color: #C1DCB5; font-size: 14px; }
+
+        /* ===== نافذة تفاصيل الطلب ===== */
+        .detail-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        .detail-modal.active { display: flex; }
+        .detail-content {
+            background: #1C2A16;
+            border-radius: 32px;
+            padding: 30px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 1px solid #A8842A;
+        }
+        .detail-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .detail-header h2 { color: #A8842A; font-size: 24px; margin-bottom: 10px; }
+        .detail-profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 60px;
+            object-fit: cover;
+            margin: 15px auto;
+            display: block;
+            border: 3px solid #A8842A;
+        }
+        .detail-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+        }
+        .detail-section h3 {
+            color: #A8842A;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .download-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .close-detail {
+            background: #A8842A;
+            color: #000;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        /* ===== نقطة التحكم الحمراء ===== */
+        .admin-trigger {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 14px;
+            height: 14px;
+            background: #f44336;
+            border-radius: 50%;
+            z-index: 10002;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .admin-trigger:hover {
+            opacity: 1;
+            transform: scale(1.3);
+            box-shadow: 0 0 10px #f44336;
+        }
+
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 15000;
+            justify-content: center;
+            align-items: center;
+        }
+        .password-modal.show { display: flex; }
+        .password-content {
+            background: #1C2A16;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            border: 2px solid #A8842A;
+        }
+        .password-content input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #A8842A;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            text-align: center;
+        }
+
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 20000;
+            justify-content: center;
+            align-items: center;
+        }
+        .admin-panel.show { display: flex; }
+        .admin-content {
+            background: #1C2A16;
+            border-radius: 20px;
+            width: 95%;
+            max-width: 1200px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 25px;
+            border: 2px solid #A8842A;
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(168,132,66,0.3);
+        }
+        .admin-header h3 { color: #A8842A; font-size: 20px; }
+        .close-admin {
+            background: #f44336;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            direction: rtl;
+        }
+        .admin-table th, .admin-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid rgba(168,132,66,0.2);
+        }
+        .admin-table th {
+            background: rgba(168,132,66,0.2);
+            color: #A8842A;
+        }
+        .admin-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin: 0 5px;
+            font-size: 14px;
+        }
+        .approve-btn { color: #4caf50; }
+        .reject-btn { color: #ff9800; }
+        .edit-btn { color: #2196f3; }
+        .delete-admin { color: #f44336; }
+        
+        /* نافذة التعديل */
+        .edit-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 25000;
+            justify-content: center;
+            align-items: center;
+        }
+        .edit-modal.show { display: flex; }
+        .edit-content {
+            background: #1C2A16;
+            border-radius: 20px;
+            width: 95%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 25px;
+            border: 2px solid #A8842A;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            z-index: 3000;
+            display: none;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 32px; }
+            .trainings-grid { grid-template-columns: 1fr; }
+            .form-grid { grid-template-columns: 1fr; }
+            .admin-table { font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header" id="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"><i class="fas fa-leaf"></i></div>
+                <div class="logo-text">
+                    <h1>Agri Maroc Précis</h1>
+                    <p>المنصة المتكاملة للفلاحة الذكية</p>
+                </div>
+            </a>
+            <a href="index.html" class="back-btn"><i class="fas fa-arrow-right"></i> <span>العودة للرئيسية</span></a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="page-header" data-aos="fade-up">
+            <span class="badge"><i class="fas fa-graduation-cap"></i> تطوير المهارات</span>
+            <h1><i class="fas fa-graduation-cap"></i> طلبات التدريب</h1>
+            <p>ابحث عن فرص تدريبية في المجال الفلاحي أو قدم طلبك للتدريب</p>
+        </div>
+
+        <!-- نموذج تقديم طلب تدريب -->
+        <div class="form-section" data-aos="fade-up">
+            <h2><i class="fas fa-paper-plane"></i> قدم طلب تدريب</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> الاسم الكامل</label>
+                    <input type="text" id="fullName" placeholder="مثال: أحمد محمد">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-chalkboard-user"></i> عنوان التدريب</label>
+                    <input type="text" id="trainingTitle" placeholder="مثال: الزراعة الذكية">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> نوع التدريب</label>
+                    <select id="trainingType">
+                        <option value="تكوين">تكوين</option>
+                        <option value="تدريب">تدريب</option>
+                        <option value="ورشة">ورشة عمل</option>
+                        <option value="مؤتمر">مؤتمر</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-calendar-alt"></i> تاريخ البدء</label>
+                    <input type="date" id="startDate">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-calendar-check"></i> تاريخ الانتهاء</label>
+                    <input type="date" id="endDate">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-graduation-cap"></i> المؤهل العلمي</label>
+                    <input type="text" id="qualification" placeholder="مثال: تقني زراعي">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-map-marker-alt"></i> الموقع المفضل</label>
+                    <input type="text" id="location" placeholder="مثال: الدار البيضاء - عن بعد">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-phone"></i> رقم الهاتف</label>
+                    <input type="tel" id="phone" placeholder="مثال: 06XXXXXXXX">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                    <input type="email" id="email" placeholder="example@email.com">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-image"></i> الصورة الشخصية</label>
+                    <div class="file-upload" onclick="document.getElementById('profileImage').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>اضغط لرفع صورة</span>
+                    </div>
+                    <input type="file" id="profileImage" accept="image/*" style="display:none" onchange="previewProfileImage()">
+                    <div class="image-preview" id="profilePreview"></div>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-file-pdf"></i> السيرة الذاتية (PDF)</label>
+                    <div class="file-upload" onclick="document.getElementById('cvFile').click()">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>اضغط لرفع ملف PDF</span>
+                    </div>
+                    <input type="file" id="cvFile" accept=".pdf" style="display:none" onchange="previewCv()">
+                    <div id="pdfPreview" class="pdf-preview" style="display:none">
+                        <i class="fas fa-file-pdf"></i>
+                        <span id="pdfName"></span>
+                        <i class="fas fa-times" onclick="removePdf()" style="cursor:pointer; margin-right:10px;"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-file-alt"></i> دوافع التدريب</label>
+                    <textarea id="motivation" placeholder="اذكر أسباب رغبتك في التدريب..."></textarea>
+                </div>
+            </div>
+            <button class="submit-btn" onclick="addTraining()"><i class="fas fa-paper-plane"></i> تقديم الطلب</button>
+        </div>
+
+        <!-- عرض الطلبات -->
+        <h2 style="margin-bottom: 20px; text-align: center;"><i class="fas fa-list"></i> الطلبات المقدمة</h2>
+        <div class="trainings-grid" id="trainingsGrid"></div>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 Agri Maroc Précis - جميع الحقوق محفوظة</p>
+    </footer>
+
+    <!-- نقطة التحكم الحمراء -->
+    <div class="admin-trigger" onclick="showAdminPassword()"></div>
+
+    <!-- نافذة كلمة المرور -->
+    <div id="passwordModal" class="password-modal">
+        <div class="password-content">
+            <i class="fas fa-lock" style="font-size: 40px; color: #A8842A;"></i>
+            <h3 style="margin: 10px 0;">لوحة التحكم</h3>
+            <input type="password" id="adminPassword" placeholder="أدخل كلمة المرور" onkeypress="if(event.keyCode==13) checkAdminPassword()">
+            <div style="display: flex; gap: 10px;">
+                <button class="submit-btn" onclick="checkAdminPassword()" style="flex:1; margin:0;">دخول</button>
+                <button class="submit-btn" onclick="closePasswordModal()" style="flex:1; margin:0; background:#333;">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- لوحة التحكم -->
+    <div id="adminPanel" class="admin-panel">
+        <div class="admin-content">
+            <div class="admin-header">
+                <h3><i class="fas fa-cog"></i> لوحة التحكم - إدارة طلبات التدريب</h3>
+                <button class="close-admin" onclick="closeAdminPanel()">✖ إغلاق</button>
+            </div>
+            <div style="overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr><th>#</th><th>الاسم</th><th>عنوان التدريب</th><th>النوع</th><th>المؤهل</th><th>الموقع</th><th>الحالة</th><th>الإجراءات</th></tr>
+                    </thead>
+                    <tbody id="adminTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة تفاصيل الطلب -->
+    <div id="detailModal" class="detail-modal">
+        <div class="detail-content" id="detailContent"></div>
+    </div>
+
+    <!-- نافذة التعديل -->
+    <div id="editModal" class="edit-modal">
+        <div class="edit-content">
+            <div class="admin-header">
+                <h3><i class="fas fa-edit"></i> تعديل الطلب</h3>
+                <button class="close-admin" onclick="closeEditModal()">✖</button>
+            </div>
+            <div class="form-group">
+                <label>الاسم الكامل</label>
+                <input type="text" id="editName">
+            </div>
+            <div class="form-group">
+                <label>عنوان التدريب</label>
+                <input type="text" id="editTitle">
+            </div>
+            <div class="form-group">
+                <label>نوع التدريب</label>
+                <select id="editType">
+                    <option value="تكوين">تكوين</option>
+                    <option value="تدريب">تدريب</option>
+                    <option value="ورشة">ورشة عمل</option>
+                    <option value="مؤتمر">مؤتمر</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>تاريخ البدء</label>
+                <input type="date" id="editStartDate">
+            </div>
+            <div class="form-group">
+                <label>تاريخ الانتهاء</label>
+                <input type="date" id="editEndDate">
+            </div>
+            <div class="form-group">
+                <label>المؤهل العلمي</label>
+                <input type="text" id="editQualification">
+            </div>
+            <div class="form-group">
+                <label>الموقع</label>
+                <input type="text" id="editLocation">
+            </div>
+            <div class="form-group">
+                <label>رقم الهاتف</label>
+                <input type="text" id="editPhone">
+            </div>
+            <div class="form-group">
+                <label>البريد الإلكتروني</label>
+                <input type="email" id="editEmail">
+            </div>
+            <div class="form-group">
+                <label>دوافع التدريب</label>
+                <textarea id="editMotivation" rows="3"></textarea>
+            </div>
+            <button class="submit-btn" onclick="saveEdit()">💾 حفظ التعديلات</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+
+        const ADMIN_PASSWORD = "admin@2005@1234";
+        let trainings = [];
+        let currentProfileImage = null;
+        let currentPdfData = null;
+        let currentPdfName = "";
+        let editingId = null;
+
+        // تحميل البيانات
+        function loadTrainings() {
+            const saved = localStorage.getItem('trainings_requests_admin');
+            if (saved) {
+                trainings = JSON.parse(saved);
+            } else {
+                trainings = [
+                    { id: 1, name: "أحمد محمد", title: "الزراعة الذكية", type: "تكوين", startDate: "2026-05-01", endDate: "2026-05-30", qualification: "تقني زراعي", location: "الدار البيضاء", phone: "0612345678", email: "ahmed@example.com", image: "https://randomuser.me/api/portraits/men/1.jpg", pdfData: null, pdfName: "", motivation: "الرغبة في تطوير المهارات في مجال الزراعة الحديثة", date: "2026-04-10", status: "pending", rejectReason: null },
+                    { id: 2, name: "سارة أحمد", title: "الري الحديث", type: "تدريب", startDate: "2026-05-10", endDate: "2026-05-24", qualification: "بكالوريوس", location: "مراكش", phone: "0687654321", email: "sara@example.com", image: "https://randomuser.me/api/portraits/women/2.jpg", pdfData: null, pdfName: "", motivation: "تحسين كفاءة الري في المزرعة", date: "2026-04-12", status: "pending", rejectReason: null }
+                ];
+                saveTrainings();
+            }
+            displayTrainings();
+        }
+
+        function saveTrainings() {
+            localStorage.setItem('trainings_requests_admin', JSON.stringify(trainings));
+            if (document.getElementById('adminPanel').classList.contains('show')) renderAdminTable();
+        }
+
+        // معاينة الصورة الشخصية
+        function previewProfileImage() {
+            const file = document.getElementById('profileImage').files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentProfileImage = e.target.result;
+                    const preview = document.getElementById('profilePreview');
+                    preview.innerHTML = `<img src="${currentProfileImage}">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // معاينة السيرة الذاتية
+        function previewCv() {
+            const file = document.getElementById('cvFile').files[0];
+            if (file && file.type === 'application/pdf') {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentPdfData = e.target.result;
+                    currentPdfName = file.name;
+                    document.getElementById('pdfPreview').style.display = 'inline-flex';
+                    document.getElementById('pdfName').innerText = file.name;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removePdf() {
+            currentPdfData = null;
+            currentPdfName = "";
+            document.getElementById('pdfPreview').style.display = 'none';
+            document.getElementById('cvFile').value = '';
+        }
+
+        // إضافة طلب جديد
+        function addTraining() {
+            const name = document.getElementById('fullName').value.trim();
+            const title = document.getElementById('trainingTitle').value.trim();
+            const type = document.getElementById('trainingType').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const qualification = document.getElementById('qualification').value.trim();
+            const location = document.getElementById('location').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const motivation = document.getElementById('motivation').value.trim();
+
+            if (!name || !title || !qualification || !location || !phone) {
+                showToast("الرجاء تعبئة جميع الحقول المطلوبة", "error");
+                return;
+            }
+
+            const newTraining = {
+                id: Date.now(),
+                name: name,
+                title: title,
+                type: type,
+                startDate: startDate || "غير محدد",
+                endDate: endDate || "غير محدد",
+                qualification: qualification,
+                location: location,
+                phone: phone,
+                email: email || "غير محدد",
+                image: currentProfileImage || 'https://randomuser.me/api/portraits/lego/1.jpg',
+                pdfData: currentPdfData,
+                pdfName: currentPdfName,
+                motivation: motivation || 'لا توجد دوافع مضافة',
+                date: new Date().toISOString().split('T')[0],
+                status: "pending",
+                rejectReason: null
+            };
+            trainings.unshift(newTraining);
+            saveTrainings();
+            displayTrainings();
+            
+            // مسح النموذج
+            document.getElementById('fullName').value = '';
+            document.getElementById('trainingTitle').value = '';
+            document.getElementById('qualification').value = '';
+            document.getElementById('location').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('motivation').value = '';
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+            document.getElementById('profilePreview').innerHTML = '';
+            document.getElementById('pdfPreview').style.display = 'none';
+            currentProfileImage = null;
+            currentPdfData = null;
+            currentPdfName = "";
+            
+            showToast("✅ تم تقديم طلب التدريب بنجاح", "success");
+        }
+
+        // عرض الطلبات في الصفحة الرئيسية
+        function displayTrainings() {
+            const grid = document.getElementById('trainingsGrid');
+            if (trainings.length === 0) {
+                grid.innerHTML = `<div class="empty-trainings"><i class="fas fa-graduation-cap"></i><h3>لا توجد طلبات</h3><p>كن أول من يقدم طلب تدريب!</p></div>`;
+                return;
+            }
+            grid.innerHTML = trainings.map(t => {
+                let statusClass = t.status === "pending" ? "status-pending" : (t.status === "approved" ? "status-approved" : "status-rejected");
+                let statusText = t.status === "pending" ? "⏳ قيد المراجعة" : (t.status === "approved" ? "✅ مقبول" : "❌ مرفوض");
+                return `
+                <div class="training-card" onclick="showTrainingDetail(${t.id})">
+                    <img class="training-image" src="${t.image}" onerror="this.src='https://randomuser.me/api/portraits/lego/1.jpg'">
+                    <div class="training-info">
+                        <h3 class="training-title">${t.title}</h3>
+                        <div class="training-name"><i class="fas fa-user"></i> ${t.name}</div>
+                        <p class="training-desc">${t.motivation.substring(0, 100)}${t.motivation.length > 100 ? '...' : ''}</p>
+                        <div class="training-details">
+                            <span class="detail-item"><i class="fas fa-graduation-cap"></i> ${t.qualification}</span>
+                            <span class="detail-item"><i class="fas fa-tag"></i> ${t.type}</span>
+                            <span class="detail-item"><i class="fas fa-map-marker-alt"></i> ${t.location}</span>
+                        </div>
+                        <div class="training-details">
+                            <span class="detail-item"><i class="fas fa-calendar-alt"></i> من ${t.startDate}</span>
+                            <span class="detail-item"><i class="fas fa-calendar-check"></i> إلى ${t.endDate}</span>
+                        </div>
+                        <div class="contact-info">
+                            <span><i class="fas fa-phone"></i> ${t.phone}</span>
+                            <span><i class="fas fa-calendar-alt"></i> ${t.date}</span>
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                        </div>
+                        ${t.rejectReason ? `<div style="font-size:11px; color:#ff9800; margin-top:5px;"><i class="fas fa-comment"></i> سبب الرفض: ${t.rejectReason}</div>` : ''}
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        // عرض تفاصيل الطلب
+        function showTrainingDetail(id) {
+            const t = trainings.find(t => t.id === id);
+            if (!t) return;
+
+            let cvHtml = '';
+            if (t.pdfData) {
+                cvHtml = `
+                    <div class="detail-section">
+                        <h3><i class="fas fa-file-pdf"></i> السيرة الذاتية</h3>
+                        <button class="download-btn" onclick="downloadCV(${t.id})">
+                            <i class="fas fa-download"></i> تحميل السيرة الذاتية (${t.pdfName || 'PDF'})
+                        </button>
+                    </div>
+                `;
+            }
+
+            const detailHtml = `
+                <div class="detail-header">
+                    <h2>${t.title}</h2>
+                    <img src="${t.image}" class="detail-profile-img" onerror="this.src='https://randomuser.me/api/portraits/lego/1.jpg'">
+                    <h3 style="color:#A8842A;">${t.name}</h3>
+                </div>
+                <div class="detail-section">
+                    <h3><i class="fas fa-user"></i> المعلومات الشخصية</h3>
+                    <p><strong>📞 الهاتف:</strong> ${t.phone}</p>
+                    <p><strong>📧 البريد الإلكتروني:</strong> ${t.email}</p>
+                    <p><strong>📍 الموقع:</strong> ${t.location}</p>
+                    <p><strong>📅 تاريخ التقديم:</strong> ${t.date}</p>
+                </div>
+                <div class="detail-section">
+                    <h3><i class="fas fa-graduation-cap"></i> المعلومات الأكاديمية</h3>
+                    <p><strong>المؤهل العلمي:</strong> ${t.qualification}</p>
+                    <p><strong>نوع التدريب:</strong> ${t.type}</p>
+                    <p><strong>فترة التدريب:</strong> من ${t.startDate} إلى ${t.endDate}</p>
+                </div>
+                <div class="detail-section">
+                    <h3><i class="fas fa-file-alt"></i> دوافع التدريب</h3>
+                    <p>${t.motivation}</p>
+                </div>
+                ${cvHtml}
+                <button class="close-detail" onclick="closeDetailModal()">✖ إغلاق</button>
+            `;
+
+            document.getElementById('detailContent').innerHTML = detailHtml;
+            document.getElementById('detailModal').classList.add('active');
+        }
+
+        function downloadCV(id) {
+            const t = trainings.find(t => t.id === id);
+            if (t && t.pdfData) {
+                const link = document.createElement('a');
+                link.href = t.pdfData;
+                link.download = t.pdfName || `CV_${t.name}.pdf`;
+                link.click();
+                showToast("✅ جاري تحميل السيرة الذاتية", "success");
+            }
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.remove('active');
+        }
+
+        // عرض جدول التحكم
+        function renderAdminTable() {
+            const tbody = document.getElementById('adminTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = trainings.map((t, idx) => {
+                let statusText = t.status === "pending" ? "⏳ قيد المراجعة" : (t.status === "approved" ? "✅ مقبول" : "❌ مرفوض");
+                return `
+                    <tr>
+                        <td>${idx + 1}</td>
+                        <td>${t.name}</td>
+                        <td>${t.title}</td>
+                        <td>${t.type}</td>
+                        <td>${t.qualification}</td>
+                        <td>${t.location}</td>
+                        <td>${statusText}</td>
+                        <td class="admin-actions">
+                            ${t.status === "pending" ? `<button class="approve-btn" onclick="approveTraining(${t.id})" title="قبول"><i class="fas fa-check-circle"></i></button>` : ''}
+                            ${t.status === "pending" ? `<button class="reject-btn" onclick="rejectTraining(${t.id})" title="رفض"><i class="fas fa-times-circle"></i></button>` : ''}
+                            <button class="edit-btn" onclick="editTraining(${t.id})" title="تعديل"><i class="fas fa-edit"></i></button>
+                            <button class="delete-admin" onclick="deleteTrainingFromAdmin(${t.id})" title="حذف"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // قبول الطلب
+        function approveTraining(id) {
+            const training = trainings.find(t => t.id === id);
+            if (training) {
+                training.status = "approved";
+                training.rejectReason = null;
+                saveTrainings();
+                displayTrainings();
+                renderAdminTable();
+                showToast(`✅ تم قبول طلب ${training.name}`, "success");
+            }
+        }
+
+        // رفض الطلب
+        function rejectTraining(id) {
+            const training = trainings.find(t => t.id === id);
+            if (training) {
+                let reason = prompt("الرجاء إدخال سبب الرفض:", "الأماكن محدودة");
+                if (reason !== null) {
+                    training.status = "rejected";
+                    training.rejectReason = reason;
+                    saveTrainings();
+                    displayTrainings();
+                    renderAdminTable();
+                    showToast(`❌ تم رفض طلب ${training.name}`, "info");
+                }
+            }
+        }
+
+        // تعديل الطلب
+        function editTraining(id) {
+            const training = trainings.find(t => t.id === id);
+            if (training) {
+                editingId = id;
+                document.getElementById('editName').value = training.name;
+                document.getElementById('editTitle').value = training.title;
+                document.getElementById('editType').value = training.type;
+                document.getElementById('editStartDate').value = training.startDate || '';
+                document.getElementById('editEndDate').value = training.endDate || '';
+                document.getElementById('editQualification').value = training.qualification;
+                document.getElementById('editLocation').value = training.location;
+                document.getElementById('editPhone').value = training.phone;
+                document.getElementById('editEmail').value = training.email || '';
+                document.getElementById('editMotivation').value = training.motivation;
+                document.getElementById('editModal').classList.add('show');
+            }
+        }
+
+        function saveEdit() {
+            const training = trainings.find(t => t.id === editingId);
+            if (training) {
+                training.name = document.getElementById('editName').value;
+                training.title = document.getElementById('editTitle').value;
+                training.type = document.getElementById('editType').value;
+                training.startDate = document.getElementById('editStartDate').value;
+                training.endDate = document.getElementById('editEndDate').value;
+                training.qualification = document.getElementById('editQualification').value;
+                training.location = document.getElementById('editLocation').value;
+                training.phone = document.getElementById('editPhone').value;
+                training.email = document.getElementById('editEmail').value;
+                training.motivation = document.getElementById('editMotivation').value;
+                saveTrainings();
+                displayTrainings();
+                renderAdminTable();
+                closeEditModal();
+                showToast("✅ تم تعديل الطلب بنجاح", "success");
+            }
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('show');
+            editingId = null;
+        }
+
+        // حذف الطلب
+        function deleteTrainingFromAdmin(id) {
+            if (confirm("هل أنت متأكد من حذف هذا الطلب نهائياً؟")) {
+                trainings = trainings.filter(t => t.id !== id);
+                saveTrainings();
+                displayTrainings();
+                renderAdminTable();
+                showToast("🗑️ تم حذف الطلب", "success");
+            }
+        }
+
+        // لوحة التحكم
+        function showAdminPassword() { document.getElementById('passwordModal').classList.add('show'); }
+        function closePasswordModal() { document.getElementById('passwordModal').classList.remove('show'); }
+        
+        function checkAdminPassword() {
+            const pwd = document.getElementById('adminPassword').value;
+            if (pwd === ADMIN_PASSWORD) {
+                closePasswordModal();
+                document.getElementById('adminPanel').classList.add('show');
+                renderAdminTable();
+                document.getElementById('adminPassword').value = '';
+            } else {
+                showToast("كلمة المرور غير صحيحة", "error");
+            }
+        }
+        
+        function closeAdminPanel() {
+            document.getElementById('adminPanel').classList.remove('show');
+        }
+
+        function showToast(msg, type) {
+            const toast = document.getElementById('toast');
+            toast.style.background = type === 'success' ? '#4CAF50' : (type === 'error' ? '#f44336' : '#2196f3');
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle')}"></i> ${msg}`;
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 3000);
+        }
+
+        window.addEventListener('scroll', () => {
+            document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        loadTrainings();
+    </script>
+</body>
+</html>
