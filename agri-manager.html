@@ -1,0 +1,1139 @@
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>مدبر | Agri Manager - النظام المتكامل لتدبير الضيعات الفلاحية</title>
+    
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Leaflet Draw -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Cairo', 'Segoe UI', sans-serif;
+            background: #0A1408;
+            color: #FBFCFB;
+        }
+        
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(10, 20, 8, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(76, 175, 80, 0.3);
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        .logo-text h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FBFCFB, #4caf50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .logo-text p {
+            font-size: 10px;
+            color: #C1DCB5;
+            letter-spacing: 1px;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+        
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+        
+        .stat i {
+            color: #4caf50;
+        }
+        
+        .company-input {
+            display: flex;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 5px 15px;
+            border-radius: 50px;
+            align-items: center;
+        }
+        
+        .company-input input {
+            background: transparent;
+            border: 1px solid rgba(76, 175, 80, 0.4);
+            padding: 6px 12px;
+            border-radius: 30px;
+            color: white;
+            font-size: 0.8rem;
+        }
+        
+        .company-input input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .company-input button {
+            background: #4caf50;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 25px;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 25px;
+        }
+        
+        .map-card {
+            background: #1C2A16;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .map-header {
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(76, 175, 80, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .map-header h3 {
+            color: #4caf50;
+            font-size: 1rem;
+        }
+        
+        .coord-info {
+            font-size: 11px;
+            color: #C1DCB5;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-family: monospace;
+        }
+        
+        #map {
+            height: 500px;
+            width: 100%;
+            background: #0A1408;
+        }
+        
+        .map-tools {
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(76, 175, 80, 0.2);
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .tool-btn {
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .tool-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+        
+        .tool-btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .control-panel {
+            background: #1C2A16;
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            max-height: 750px;
+            overflow-y: auto;
+        }
+        
+        .control-panel::-webkit-scrollbar {
+            width: 5px;
+        }
+        
+        .control-panel::-webkit-scrollbar-track {
+            background: #0A1408;
+            border-radius: 10px;
+        }
+        
+        .control-panel::-webkit-scrollbar-thumb {
+            background: #4caf50;
+            border-radius: 10px;
+        }
+        
+        .section-title {
+            font-size: 1rem;
+            margin: 20px 0 12px 0;
+            border-right: 3px solid #4caf50;
+            padding-right: 12px;
+            color: #4caf50;
+            font-weight: 700;
+        }
+        
+        .area-card {
+            background: linear-gradient(135deg, #0A1408, #1C2A16);
+            border-radius: 16px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            margin-bottom: 20px;
+        }
+        
+        .area-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #4caf50;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #C1DCB5;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        
+        /* ===== تحسين مظهر الحقول ===== */
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            border-radius: 12px;
+            color: #FBFCFB;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        
+        /* عند التركيز على الحقل */
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4caf50;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 8px rgba(76, 175, 80, 0.3);
+        }
+        
+        /* ===== تحسين مظهر القوائم المنسدلة (select) عند النقر ===== */
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: left 12px center;
+            background-size: 20px;
+        }
+        
+        /* تحسين خيارات القائمة المنسدلة */
+        select option {
+            background-color: #1C2A16;
+            color: #FBFCFB;
+            padding: 10px;
+        }
+        
+        /* عند النقر على select - تظهر الخلفية البيضاء للخيارات */
+        select:focus option,
+        select:hover option {
+            background-color: white !important;
+            color: #0A1408 !important;
+        }
+        
+        /* تنسيق خاص للمتصفحات المختلفة */
+        select option:hover,
+        select option:focus,
+        select option:active {
+            background: white !important;
+            color: #0A1408 !important;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            font-size: 0.85rem;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+        
+        .sectors-list, .workers-list {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            padding: 10px;
+            margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .sector-item, .worker-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-right: 3px solid;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .sector-item:hover, .worker-card:hover {
+            background: rgba(76, 175, 80, 0.15);
+            transform: translateX(-3px);
+        }
+        
+        .sector-number {
+            display: inline-block;
+            background: #4caf50;
+            color: #0A1408;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            text-align: center;
+            line-height: 24px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+        
+        .delete-sector {
+            color: #ff6b6b;
+            cursor: pointer;
+            float: left;
+            font-size: 0.75rem;
+        }
+        
+        .color-preview {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+        
+        .select-by-number {
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 16px;
+            padding: 12px;
+            margin: 15px 0;
+        }
+        
+        .number-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .num-btn {
+            width: 40px;
+            background: #4caf50;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 20px;
+            color: white;
+            padding: 6px;
+            font-size: 0.8rem;
+        }
+        
+        .time-group {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .time-group input {
+            width: 50%;
+        }
+        
+        .map-type-selector {
+            background: #2e7d32;
+            padding: 5px 12px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .map-type-selector select {
+            width: auto;
+            background: white;
+            color: #0A1408;
+            padding: 4px 8px;
+            font-size: 0.7rem;
+        }
+        
+        .badge {
+            background: #4caf50;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            margin-right: 8px;
+        }
+        
+        footer {
+            background: #0A1408;
+            padding: 25px 5% 15px;
+            text-align: center;
+            border-top: 1px solid rgba(76, 175, 80, 0.2);
+            margin-top: 30px;
+        }
+        
+        .copyright {
+            color: #C1DCB5;
+            font-size: 0.7rem;
+        }
+        
+        @media (max-width: 1000px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+            .header {
+                padding: 0.8rem 1rem;
+            }
+            .stats {
+                gap: 10px;
+                padding: 5px 12px;
+            }
+            .stat {
+                font-size: 0.7rem;
+            }
+            .logo-text h1 {
+                font-size: 1rem;
+            }
+        }
+        
+        .worker-marker {
+            background: transparent;
+            border: none;
+        }
+        
+        .timer {
+            color: #4caf50;
+            font-weight: bold;
+        }
+        
+        .satellite-badge {
+            display: inline-block;
+            background: rgba(76, 175, 80, 0.15);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 10px;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon"><i class="fas fa-tractor"></i></div>
+            <div class="logo-text">
+                <h1>مدبر | Agri Manager</h1>
+                <p>النظام المتكامل لتدبير الضيعات الفلاحية</p>
+            </div>
+        </div>
+        <div class="company-input">
+            <i class="fas fa-building" style="color:#4caf50;"></i>
+            <input type="text" id="companyNameInput" placeholder="اسم الشركة" value="شركة الفلاحة المتكاملة">
+            <button id="setCompanyBtn"><i class="fas fa-check"></i> تعيين</button>
+        </div>
+        <div class="stats">
+            <div class="stat"><i class="fas fa-map"></i> الضيعة: <span id="farmStatus">غير محددة</span></div>
+            <div class="stat"><i class="fas fa-cut"></i> الأجزاء: <span id="sectorCount">0</span></div>
+            <div class="stat"><i class="fas fa-users"></i> العمال: <span id="activeWorkers">0</span></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="map-card">
+            <div class="map-header">
+                <h3><i class="fas fa-map-marked-alt"></i> خريطة الضيعة - صور الأقمار الصناعية</h3>
+                <div class="coord-info" id="coordInfo">لم يتم الاختيار</div>
+            </div>
+            <div id="map"></div>
+            <div class="map-tools">
+                <button class="tool-btn" id="drawFarmBtn"><i class="fas fa-draw-polygon"></i> رسم حدود الضيعة</button>
+                <button class="tool-btn" id="drawSectorBtn" disabled><i class="fas fa-palette"></i> رسم جزء</button>
+                <button class="tool-btn" id="clearFarmBtn"><i class="fas fa-trash-alt"></i> مسح الكل</button>
+                <button class="tool-btn" id="fitFarmBtn"><i class="fas fa-expand"></i> تكبير</button>
+                <div class="map-type-selector">
+                    <i class="fas fa-satellite"></i>
+                    <select id="mapTypeSelect">
+                        <option value="satellite">🛰️ أقمار صناعية</option>
+                        <option value="hybrid">🌍 هجين</option>
+                        <option value="streets">🗺️ شوارع</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-panel">
+            <div class="area-card">
+                <i class="fas fa-chart-line"></i>
+                <strong>📏 مساحة الضيعة الإجمالية</strong><br>
+                <span class="area-value" id="totalAreaValue">0</span><br>
+                <small id="totalAreaUnit">م²</small>
+                <div class="satellite-badge">
+                    <i class="fas fa-microchip"></i> بيانات معتمدة | Sentinel-2
+                </div>
+            </div>
+
+            <div class="select-by-number">
+                <label><i class="fas fa-hashtag"></i> اختيار الجزء برقمه</label>
+                <div class="number-buttons" id="numberButtons">
+                    <span style="color:#888;">لا توجد أجزاء</span>
+                </div>
+                <div style="margin-top: 8px; font-size: 12px;">
+                    📌 الجزء المحدد: <span id="selectedSectorDisplay">لا شيء</span>
+                </div>
+            </div>
+
+            <h3 class="section-title"><i class="fas fa-palette"></i> إدارة الأجزاء</h3>
+            <div class="form-group">
+                <label>اسم الجزء</label>
+                <input type="text" id="newSectorName" placeholder="مثال: قطاع الزيتون">
+            </div>
+            <div class="form-group">
+                <label>لون الجزء</label>
+                <select id="sectorColor">
+                    <option value="#4caf50">🟢 أخضر</option>
+                    <option value="#ff9800">🟠 برتقالي</option>
+                    <option value="#2196f3">🔵 أزرق</option>
+                    <option value="#f44336">🔴 أحمر</option>
+                    <option value="#9c27b0">🟣 بنفسجي</option>
+                    <option value="#00bcd4">🩵 فيروزي</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>النشاط الرئيسي</label>
+                <select id="sectorActivity">
+                    <option value="الري">💧 الري</option>
+                    <option value="التسميد">🌱 التسميد</option>
+                    <option value="الحصاد">🌾 الحصاد</option>
+                    <option value="التقليم">✂️ التقليم</option>
+                    <option value="المكافحة">🐞 المكافحة</option>
+                </select>
+            </div>
+            <button id="addSectorBtn" disabled><i class="fas fa-plus-circle"></i> إضافة جزء (ارسمه)</button>
+
+            <h3 class="section-title"><i class="fas fa-layer-group"></i> الأجزاء المسجلة</h3>
+            <div id="sectorsList" class="sectors-list">
+                <div style="text-align:center; color:#888;">🎨 ارسم أجزاء ملونة</div>
+            </div>
+
+            <h3 class="section-title"><i class="fas fa-hard-hat"></i> إدارة العمال</h3>
+            <div class="form-group">
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="newWorkerName" placeholder="اسم العامل" style="flex:2">
+                    <button id="addWorkerBtn" style="width: auto; padding: 8px 15px;">➕</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>اختيار العامل</label>
+                <select id="workerSelect">
+                    <option value="">-- اختر عاملاً --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>المدة المستغرقة</label>
+                <div class="time-group">
+                    <input type="number" id="taskHours" placeholder="ساعات" value="1" min="0">
+                    <input type="number" id="taskMinutes" placeholder="دقائق" value="0" min="0" max="59">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>وصف المهمة</label>
+                <input type="text" id="taskDescription" placeholder="وصف إضافي">
+            </div>
+            <button id="assignTaskBtn"><i class="fas fa-paper-plane"></i> إرسال العامل</button>
+
+            <h3 class="section-title"><i class="fas fa-users"></i> العمال النشطون</h3>
+            <div id="workersList" class="workers-list">
+                <div style="color:#888; text-align:center;">👨‍🌾 أضف عامل جديد</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="copyright">
+            <p>© 2026 مدبر | Agri Manager - نظام متكامل لتدبير الضيعات الفلاحية | بيانات الأقمار الصناعية © Google Earth</p>
+            <p style="margin-top: 5px; font-size: 10px;">مختبر متقدم لتحليل البيانات الزراعية - معتمد من Agri Maroc Précis</p>
+        </div>
+    </footer>
+
+    <script>
+        // ========== خرائط Google ==========
+        let googleSatellite = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+            attribution: '© Google Earth',
+            maxZoom: 20
+        });
+        
+        let googleLabels = L.tileLayer('https://{s}.google.com/vt/lyrs=h&x={x}&y={y}&z={z}', {
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+            opacity: 0.95
+        });
+        
+        let googleHybrid = L.tileLayer('https://{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', {
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+            attribution: '© Google Hybrid'
+        });
+        
+        let googleStreets = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+            attribution: '© Google Maps'
+        });
+        
+        let map = L.map('map').setView([31.7917, -7.0926], 7);
+        googleSatellite.addTo(map);
+        googleLabels.addTo(map);
+        
+        let currentSatellite = googleSatellite;
+        let currentLabels = googleLabels;
+        
+        document.getElementById('mapTypeSelect').onchange = (e) => {
+            map.removeLayer(currentSatellite);
+            if (currentLabels) map.removeLayer(currentLabels);
+            
+            switch(e.target.value) {
+                case 'satellite':
+                    currentSatellite = googleSatellite;
+                    currentSatellite.addTo(map);
+                    googleLabels.addTo(map);
+                    currentLabels = googleLabels;
+                    break;
+                case 'hybrid':
+                    currentSatellite = googleHybrid;
+                    currentSatellite.addTo(map);
+                    currentLabels = null;
+                    break;
+                case 'streets':
+                    currentSatellite = googleStreets;
+                    currentSatellite.addTo(map);
+                    currentLabels = null;
+                    break;
+            }
+        };
+        
+        // علامة الشركة
+        let companyMarker = null;
+        function updateCompanyOnMap() {
+            let companyName = document.getElementById('companyNameInput').value;
+            if (companyMarker) map.removeLayer(companyMarker);
+            let center = map.getCenter();
+            let icon = L.divIcon({
+                html: `<div style="background:#4caf50; color:#0A1408; padding:5px 14px; border-radius:30px; font-weight:bold; font-size:12px;"><i class="fas fa-building"></i> ${companyName}</div>`,
+                iconSize: [null, null]
+            });
+            companyMarker = L.marker(center, { icon, interactive: false }).addTo(map);
+            map.on('moveend', () => companyMarker.setLatLng(map.getCenter()));
+        }
+        document.getElementById('setCompanyBtn').onclick = updateCompanyOnMap;
+        setTimeout(updateCompanyOnMap, 500);
+        
+        // ========== دوال حساب المساحة المحسنة ==========
+        function calculatePolygonArea(latLngs) {
+            if (!latLngs || latLngs.length < 3) return 0;
+            let area = 0;
+            for (let i = 0; i < latLngs.length; i++) {
+                const j = (i + 1) % latLngs.length;
+                const p1 = latLngs[i];
+                const p2 = latLngs[j];
+                area += (p2.lng * Math.PI / 180 - p1.lng * Math.PI / 180) * 
+                        (2 + Math.sin(p1.lat * Math.PI / 180) + Math.sin(p2.lat * Math.PI / 180));
+            }
+            return Math.abs(area * 6378137 * 6378137 / 2);
+        }
+        
+        function formatArea(area) {
+            if (area >= 10000) {
+                return { value: (area/10000).toFixed(2), unit: "هكتار", display: `${(area/10000).toFixed(2)} هكتار (${Math.round(area)} م²)` };
+            }
+            return { value: Math.round(area), unit: "م²", display: `${Math.round(area)} متر مربع` };
+        }
+        
+        // ========== المتغيرات ==========
+        let farmPolygon = null;
+        let farmLayerGroup = L.layerGroup().addTo(map);
+        let workersLayerGroup = L.layerGroup().addTo(map);
+        let sectors = [];
+        let workers = [];
+        let nextSectorId = 1;
+        let nextWorkerId = 1;
+        let currentDrawingMode = null;
+        let drawControl = null;
+        let farmArea = 0;
+        let selectedSectorForTask = null;
+        
+        function updateWorkersOnMap() {
+            workersLayerGroup.clearLayers();
+            workers.forEach(worker => {
+                if (worker.sectorId && worker.currentTask) {
+                    let sector = sectors.find(s => s.id === worker.sectorId);
+                    if (sector && sector.layer) {
+                        let center = sector.layer.getBounds().getCenter();
+                        let icon = L.divIcon({
+                            html: `<div style="background:#ff5722; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #4caf50;"><i class="fas fa-hard-hat" style="font-size:11px; color:white;"></i></div><div style="background:#1C2A16; color:#4caf50; padding:1px 5px; border-radius:10px; font-size:8px;">${worker.name}</div>`,
+                            iconSize: [24, 32],
+                            popupAnchor: [0, -12]
+                        });
+                        L.marker(center, { icon }).addTo(workersLayerGroup).bindPopup(`
+                            <div style="text-align:center;">
+                                <b>${worker.name}</b><br>
+                                ${worker.currentTask}<br>
+                                ⏱️ ${Math.floor(worker.timeRemaining/60)} دقيقة
+                            </div>
+                        `);
+                    }
+                }
+            });
+        }
+        
+        function renderWorkersList() {
+            let container = document.getElementById('workersList');
+            if (workers.length === 0) {
+                container.innerHTML = '<div style="color:#888; text-align:center;">👨‍🌾 أضف عامل جديد</div>';
+                return;
+            }
+            let html = '';
+            workers.forEach(w => {
+                if (w.currentTask) {
+                    let mins = Math.floor(w.timeRemaining / 60);
+                    html += `<div class="worker-card" style="border-left: none; border-right: 3px solid #ff5722;">
+                                <b><i class="fas fa-user"></i> ${w.name}</b> 🔴 مشغول<br>
+                                🎯 ${w.currentTask}<br>
+                                ⏱️ <span class="timer">${mins} دقيقة</span>
+                            </div>`;
+                } else {
+                    html += `<div class="worker-card" style="border-left: none; border-right: 3px solid #4caf50;">
+                                <b><i class="fas fa-user-check"></i> ${w.name}</b> 🟢 متفرغ
+                            </div>`;
+                }
+            });
+            container.innerHTML = html;
+            document.getElementById('activeWorkers').innerText = workers.filter(w => w.currentTask).length;
+            updateWorkersOnMap();
+            renderSectorsList();
+        }
+        
+        function finishWorkerTask(worker) {
+            if (worker.intervalId) clearInterval(worker.intervalId);
+            worker.currentTask = null;
+            worker.timeRemaining = 0;
+            worker.sectorId = null;
+            worker.sectorNumber = null;
+            renderWorkersList();
+            alert(`✅ أنهى العامل ${worker.name} مهمته بنجاح!`);
+        }
+        
+        function startWorkerTask(worker, sector, durationSeconds, description) {
+            if (worker.currentTask) { alert(`${worker.name} مشغول`); return false; }
+            worker.currentTask = `الجزء ${sector.number} (${sector.activity})`;
+            worker.timeRemaining = durationSeconds;
+            worker.sectorId = sector.id;
+            worker.sectorNumber = sector.number;
+            if (worker.intervalId) clearInterval(worker.intervalId);
+            let intervalId = setInterval(() => {
+                if (worker.timeRemaining > 0) {
+                    worker.timeRemaining--;
+                    renderWorkersList();
+                    if (worker.timeRemaining <= 0) finishWorkerTask(worker);
+                }
+            }, 1000);
+            worker.intervalId = intervalId;
+            renderWorkersList();
+            return true;
+        }
+        
+        function addWorker(name) {
+            if (!name.trim()) { alert("أدخل اسم العامل"); return; }
+            workers.push({ id: nextWorkerId++, name: name.trim(), currentTask: null, timeRemaining: 0, intervalId: null, sectorId: null, sectorNumber: null });
+            renderWorkersList();
+            updateWorkerSelect();
+        }
+        
+        function updateWorkerSelect() {
+            let select = document.getElementById('workerSelect');
+            select.innerHTML = '<option value="">-- اختر عاملاً --</option>';
+            workers.forEach(w => {
+                let status = w.currentTask ? '(مشغول)' : '(متفرغ)';
+                select.innerHTML += `<option value="${w.id}">${w.name} ${status}</option>`;
+            });
+        }
+        
+        function assignWorkerToSector() {
+            if (sectors.length === 0) { alert("⚠️ لا توجد أجزاء. ارسم أجزاء أولاً."); return; }
+            let workerId = parseInt(document.getElementById('workerSelect').value);
+            if (!workerId) { alert("اختر عاملاً"); return; }
+            let worker = workers.find(w => w.id === workerId);
+            if (!worker) { alert("العامل غير موجود"); return; }
+            if (worker.currentTask) { alert(`${worker.name} مشغول حالياً`); return; }
+            
+            let sectorNum = prompt("🔢 أدخل رقم الجزء:\n" + sectors.map(s => s.number).join(", "), "1");
+            if (!sectorNum) return;
+            let sector = sectors.find(s => s.number === parseInt(sectorNum));
+            if (!sector) { alert("الجزء غير موجود"); return; }
+            
+            let hours = parseInt(document.getElementById('taskHours').value) || 0;
+            let minutes = parseInt(document.getElementById('taskMinutes').value) || 0;
+            let seconds = (hours * 3600) + (minutes * 60);
+            if (seconds <= 0) { alert("المدة غير صحيحة"); return; }
+            
+            if (confirm(`إرسال ${worker.name} إلى الجزء ${sector.number} لمدة ${hours} ساعة ${minutes} دقيقة؟`)) {
+                startWorkerTask(worker, sector, seconds, document.getElementById('taskDescription').value);
+                map.fitBounds(sector.layer.getBounds());
+                let origColor = sector.layer.options.color;
+                sector.layer.setStyle({ color: '#ff0000', weight: 5 });
+                setTimeout(() => sector.layer.setStyle({ color: origColor, weight: 3 }), 1000);
+                document.getElementById('taskDescription').value = '';
+            }
+        }
+        
+        // ========== دوال الرسم المحسنة ==========
+        function initDrawControl(mode, color) {
+            if (drawControl) {
+                map.removeControl(drawControl);
+                map.off(L.Draw.Event.CREATED);
+            }
+            
+            let drawOptions = {
+                draw: {
+                    polygon: {
+                        allowIntersection: false,
+                        showArea: true,
+                        shapeOptions: {
+                            color: color,
+                            weight: 4,
+                            fillOpacity: 0.4,
+                            fillColor: color
+                        }
+                    },
+                    polyline: false,
+                    rectangle: false,
+                    circle: false,
+                    marker: false,
+                    circlemarker: false
+                },
+                edit: false
+            };
+            
+            drawControl = new L.Control.Draw(drawOptions);
+            map.addControl(drawControl);
+            
+            map.on(L.Draw.Event.CREATED, function(e) {
+                let layer = e.layer;
+                let latlngs = layer.getLatLngs()[0];
+                let area = calculatePolygonArea(latlngs);
+                
+                if (currentDrawingMode === 'farm') {
+                    if (farmPolygon) {
+                        farmLayerGroup.removeLayer(farmPolygon);
+                    }
+                    farmPolygon = layer;
+                    farmArea = area;
+                    farmLayerGroup.addLayer(farmPolygon);
+                    
+                    document.getElementById('farmStatus').innerHTML = '✓ محددة';
+                    document.getElementById('drawSectorBtn').disabled = false;
+                    document.getElementById('addSectorBtn').disabled = false;
+                    updateTotalAreaDisplay();
+                    alert(`✅ تم رسم حدود الضيعة بنجاح\n📐 المساحة: ${formatArea(area).display}`);
+                } 
+                else if (currentDrawingMode === 'sector') {
+                    if (!farmPolygon) {
+                        alert("⚠️ يرجى رسم حدود الضيعة أولاً");
+                        return;
+                    }
+                    let name = document.getElementById('newSectorName').value.trim();
+                    if (!name) {
+                        alert("⚠️ أدخل اسم الجزء");
+                        return;
+                    }
+                    let number = sectors.length + 1;
+                    let id = nextSectorId++;
+                    let sectorColor = document.getElementById('sectorColor').value;
+                    let activity = document.getElementById('sectorActivity').value;
+                    
+                    layer.setStyle({ 
+                        color: sectorColor, 
+                        weight: 3, 
+                        fillOpacity: 0.5, 
+                        fillColor: sectorColor 
+                    });
+                    
+                    farmLayerGroup.addLayer(layer);
+                    sectors.push({ 
+                        id, number, name, activity, 
+                        layer, area, color: sectorColor 
+                    });
+                    
+                    renderSectorsList();
+                    updateNumberButtons();
+                    document.getElementById('sectorCount').innerText = sectors.length;
+                    document.getElementById('newSectorName').value = '';
+                    
+                    alert(`✅ تم إضافة الجزء رقم ${number}: ${name}\n📐 المساحة: ${formatArea(area).display}`);
+                }
+                
+                if (drawControl) {
+                    map.removeControl(drawControl);
+                    drawControl = null;
+                }
+                currentDrawingMode = null;
+            });
+        }
+        
+        function renderSectorsList() {
+            let container = document.getElementById('sectorsList');
+            if (sectors.length === 0) {
+                container.innerHTML = '<div style="text-align:center; color:#888;">🎨 ارسم أجزاء ملونة</div>';
+                return;
+            }
+            let html = '';
+            sectors.forEach(sec => {
+                let workersCount = workers.filter(w => w.sectorId === sec.id && w.currentTask).length;
+                let badge = workersCount > 0 ? `<span class="badge">👥 ${workersCount}</span>` : '';
+                html += `
+                    <div class="sector-item" style="border-right-color: ${sec.color}" onclick="selectSectorByNumber(${sec.number})">
+                        <div class="sector-name">
+                            <span><span class="sector-number">${sec.number}</span> ${sec.name} ${badge}</span>
+                            <span class="delete-sector" onclick="event.stopPropagation(); deleteSector(${sec.id})"><i class="fas fa-trash"></i></span>
+                        </div>
+                        <div style="font-size:11px;">📌 ${sec.activity}</div>
+                        <div style="font-size:10px;">📐 ${formatArea(sec.area).display}</div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+        
+        window.deleteSector = function(id) {
+            if (confirm("⚠️ هل أنت متأكد من حذف هذا الجزء؟")) {
+                let index = sectors.findIndex(s => s.id === id);
+                if (index !== -1) {
+                    farmLayerGroup.removeLayer(sectors[index].layer);
+                    sectors.splice(index, 1);
+                    sectors.forEach((s, i) => s.number = i + 1);
+                    renderSectorsList();
+                    updateNumberButtons();
+                    document.getElementById('sectorCount').innerText = sectors.length;
+                    workers.forEach(w => {
+                        if (w.sectorId === id) {
+                            if (w.intervalId) clearInterval(w.intervalId);
+                            w.currentTask = null;
+                            w.sectorId = null;
+                        }
+                    });
+                    renderWorkersList();
+                    alert("✅ تم حذف الجزء بنجاح");
+                }
+            }
+        };
+        
+        function updateNumberButtons() {
+            let container = document.getElementById('numberButtons');
+            if (sectors.length === 0) {
+                container.innerHTML = '<span style="color:#888;">لا توجد أجزاء</span>';
+                return;
+            }
+            let html = '';
+            sectors.forEach(s => {
+                html += `<button class="num-btn" onclick="selectSectorByNumber(${s.number})" style="background:${s.color}">${s.number}</button>`;
+            });
+            container.innerHTML = html;
+        }
+        
+        window.selectSectorByNumber = function(number) {
+            let sector = sectors.find(s => s.number === number);
+            if (sector) {
+                selectedSectorForTask = sector;
+                document.getElementById('selectedSectorDisplay').innerHTML = `رقم ${sector.number} - ${sector.name}`;
+                map.fitBounds(sector.layer.getBounds());
+                let origColor = sector.layer.options.color;
+                sector.layer.setStyle({ color: '#ff0000', weight: 5 });
+                setTimeout(() => sector.layer.setStyle({ color: origColor, weight: 3 }), 800);
+            }
+        };
+        
+        function updateTotalAreaDisplay() {
+            if (farmArea > 0) {
+                let f = formatArea(farmArea);
+                document.getElementById('totalAreaValue').innerHTML = f.value;
+                document.getElementById('totalAreaUnit').innerHTML = f.unit;
+            } else {
+                document.getElementById('totalAreaValue').innerHTML = '0';
+                document.getElementById('totalAreaUnit').innerHTML = 'متر مربع';
+            }
+        }
+        
+        // ========== ربط الأحداث ==========
+        document.getElementById('drawFarmBtn').onclick = () => {
+            if (farmPolygon && !confirm("⚠️ رسم حدود جديدة سيمسح الأجزاء الحالية. هل تريد المتابعة؟")) return;
+            
+            if (farmPolygon) {
+                farmLayerGroup.clearLayers();
+                sectors = [];
+                farmPolygon = null;
+                farmArea = 0;
+                updateTotalAreaDisplay();
+                updateNumberButtons();
+                renderSectorsList();
+                document.getElementById('farmStatus').innerHTML = 'غير محددة';
+                document.getElementById('sectorCount').innerText = '0';
+                document.getElementById('drawSectorBtn').disabled = true;
+                document.getElementById('addSectorBtn').disabled = true;
+            }
+            currentDrawingMode = 'farm';
+            initDrawControl('farm', '#4caf50');
+        };
+        
+        document.getElementById('drawSectorBtn').onclick = () => {
+            if (!farmPolygon) { 
+                alert("⚠️ يرجى رسم حدود الضيعة أولاً"); 
+                return; 
+            }
+            if (!document.getElementById('newSectorName').value.trim()) { 
+                alert("⚠️ أدخل اسم الجزء"); 
+                return; 
+            }
+            currentDrawingMode = 'sector';
+            initDrawControl('sector', document.getElementById('sectorColor').value);
+        };
+        
+        document.getElementById('clearFarmBtn').onclick = () => {
+            if (confirm("⚠️ مسح كل شيء (الحدود، الأجزاء، المهام، العمال)؟")) {
+                farmLayerGroup.clearLayers();
+                workersLayerGroup.clearLayers();
+                workers.forEach(w => { if(w.intervalId) clearInterval(w.intervalId); w.currentTask = null; });
+                sectors = [];
+                workers = [];
+                farmPolygon = null;
+                farmArea = 0;
+                nextSectorId = 1;
+                nextWorkerId = 1;
+                renderSectorsList();
+                renderWorkersList();
+                updateTotalAreaDisplay();
+                updateNumberButtons();
+                document.getElementById('farmStatus').innerHTML = 'غير محددة';
+                document.getElementById('sectorCount').innerText = '0';
+                document.getElementById('drawSectorBtn').disabled = true;
+                document.getElementById('addSectorBtn').disabled = true;
+                document.getElementById('selectedSectorDisplay').innerHTML = 'لا شيء';
+                alert("✅ تم مسح جميع البيانات");
+            }
+        };
+        
+        document.getElementById('fitFarmBtn').onclick = () => {
+            if (farmPolygon) {
+                map.fitBounds(farmPolygon.getBounds());
+            } else if (sectors.length > 0) {
+                map.fitBounds(sectors[0].layer.getBounds());
+            } else {
+                alert("⚠️ لم يتم رسم حدود الضيعة أو أجزاء بعد");
+            }
+        };
+        
+        document.getElementById('assignTaskBtn').onclick = assignWorkerToSector;
+        document.getElementById('addWorkerBtn').onclick = () => {
+            addWorker(document.getElementById('newWorkerName').value);
+            document.getElementById('newWorkerName').value = '';
+        };
+        document.getElementById('addSectorBtn').onclick = () => {
+            if (farmPolygon) document.getElementById('drawSectorBtn').click();
+            else alert("⚠️ حدد حدود الضيعة أولاً");
+        };
+        
+        // ========== عمال افتراضيين ==========
+        addWorker("أحمد");
+        addWorker("فاطمة");
+        addWorker("خالد");
+    </script>
+</body>
+</html>
