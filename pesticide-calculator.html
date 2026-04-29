@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="description" content="حاسبة رش المبيدات الاحترافية - معايرة دقيقة للبخاخات الزراعية">
+    <meta name="theme-color" content="#1a5f3e">
+    <title>حاسبة رش المبيدات | المعايرة الاحترافية للبخاخات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(145deg, #e8f3ec 0%, #d1e3d6 100%);
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e0ecd9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3e8e63;
+            border-radius: 10px;
+        }
+
+        .professional-container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* header premium */
+        .premium-header {
+            background: linear-gradient(135deg, #0a3622 0%, #145c34 100%);
+            border-radius: 2rem;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.25);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo-area h1 {
+            color: #fef7c0;
+            font-size: 1.8rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-area p {
+            color: #bbdfbe;
+            font-size: 0.85rem;
+        }
+
+        .badge-area {
+            background: rgba(255,255,240,0.15);
+            padding: 0.5rem 1.2rem;
+            border-radius: 60px;
+            backdrop-filter: blur(4px);
+        }
+
+        .badge-area span {
+            color: #ffefaa;
+            font-weight: 600;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 1.8rem;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 2rem;
+            box-shadow: 0 15px 35px -10px rgba(0, 20, 0, 0.15);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 25px 40px -14px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            padding: 1.3rem 1.8rem;
+            background: #fafef7;
+            border-bottom: 2px solid #e2f0df;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #1f543b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-body {
+            padding: 1.6rem 1.8rem;
+        }
+
+        .input-group-modern {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group-modern label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #2b5a3e;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .input-with-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: #f6faf4;
+            border: 1.5px solid #deecda;
+            border-radius: 1.2rem;
+            transition: all 0.2s;
+        }
+
+        .input-with-icon:focus-within {
+            border-color: #2c8e5a;
+            box-shadow: 0 0 0 3px rgba(44,142,90,0.2);
+            background: white;
+        }
+
+        .input-with-icon i {
+            padding: 0 15px;
+            color: #6dab86;
+            font-size: 1.1rem;
+        }
+
+        .input-with-icon input, .input-with-icon select {
+            flex: 1;
+            padding: 13px 0 13px 10px;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            font-weight: 500;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .input-with-icon select {
+            cursor: pointer;
+        }
+
+        .unit-text {
+            padding: 0 15px;
+            font-weight: 600;
+            color: #2d734b;
+            background: #eaf3e7;
+            height: 100%;
+            border-radius: 0 1rem 1rem 0;
+            display: flex;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        .result-card {
+            background: linear-gradient(145deg, #f1f8ef, #e4f0e0);
+        }
+
+        .big-result {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .big-result .label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #4e7b63;
+        }
+
+        .big-result .value {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #0c5d34;
+            line-height: 1.2;
+        }
+
+        .big-result .sub {
+            font-size: 0.8rem;
+            color: #6e9279;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 1rem;
+        }
+
+        .info-item {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 0.8rem;
+            text-align: center;
+        }
+
+        .info-item small {
+            color: #749b82;
+            font-size: 0.7rem;
+        }
+
+        .info-item strong {
+            display: block;
+            font-size: 1.2rem;
+            color: #195c38;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: #217a4c;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 2rem;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            flex: 1;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+
+        .btn-secondary {
+            background: #eff7eb;
+            border: 1.5px solid #bdd8b4;
+            padding: 12px 20px;
+            border-radius: 2rem;
+            color: #2c6e48;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .btn-primary:hover { background: #0e5f39; transform: scale(0.98); }
+        .btn-secondary:hover { background: #e0f0da; }
+
+        .history-log {
+            background: #fefbf0;
+            border-radius: 1.2rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            max-height: 180px;
+            overflow-y: auto;
+            font-size: 0.8rem;
+        }
+
+        .history-log p {
+            padding: 6px 0;
+            border-bottom: 1px dashed #dde4cf;
+            font-family: monospace;
+        }
+
+        .equation-banner {
+            background: #4a6d5930;
+            border-radius: 1.2rem;
+            padding: 10px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #2c6143;
+            margin-top: 1rem;
+        }
+
+        /*闪烁效果 عند الحساب */
+        @keyframes pulse {
+            0% { transform: scale(1); background-color: white; }
+            50% { transform: scale(1.02); background-color: #e8f5e9; }
+            100% { transform: scale(1); background-color: white; }
+        }
+
+        .result-animate {
+            animation: pulse 0.5s ease;
+        }
+
+        @media (max-width: 750px) {
+            body { padding: 1rem; }
+            .premium-header { flex-direction: column; text-align: center; }
+            .big-result .value { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="professional-container">
+    <div class="premium-header">
+        <div class="logo-area">
+            <h1><i class="fas fa-tractor"></i> حاسبة رش المبيدات <i class="fas fa-leaf"></i></h1>
+            <p>معايرة دقيقة للبخاخات · اضغط "حساب دقيق" لعرض النتيجة</p>
+        </div>
+        <div class="badge-area">
+            <span><i class="fas fa-chart-line"></i> المعادلة: (لتر/هكتار × كم/س × م) / (600 × عدد البخاخات)</span>
+        </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-sliders-h" style="color:#2b7a4b;"></i> إعدادات الرش
+            </div>
+            <div class="card-body">
+                <div class="input-group-modern">
+                    <label><i class="fas fa-tint"></i> كمية الخليط (معدل الرش)</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-flask"></i>
+                        <input type="number" id="mixLHa" step="any" value="3.0" placeholder="مثال: 3.0">
+                        <span class="unit-text">لتر/هكتار</span>
+                    </div>
+                </div>
+
+                <div class="input-group-modern">
+                    <label><i class="fas fa-tachometer-alt"></i> سرعة الجرار</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-road"></i>
+                        <input type="number" id="speedKmh" step="any" value="3.0" placeholder="كم/ساعة">
+                        <span class="unit-text">كم/ساعة</span>
+                    </div>
+                </div>
+
+                <div class="input-group-modern">
+                    <label><i class="fas fa-arrows-alt-h"></i> عرض عمل الآلة</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-ruler-combined"></i>
+                        <input type="number" id="widthM" step="any" value="3.0" placeholder="متر">
+                        <span class="unit-text">متر</span>
+                    </div>
+                </div>
+
+                <div class="input-group-modern">
+                    <label><i class="fas fa-water"></i> عدد البخاخات (الفوهات)</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-gripfire"></i>
+                        <input type="number" id="nozzlesNum" step="1" value="2" placeholder="عدد">
+                        <span class="unit-text">بخاخ</span>
+                    </div>
+                </div>
+
+                <div class="input-group-modern">
+                    <label><i class="fas fa-chart-pie"></i> نوعية المحصول (توصية)</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-seedling"></i>
+                        <select id="cropType">
+                            <option value="general">عام / حبوب</option>
+                            <option value="fruit">أشجار مثمرة</option>
+                            <option value="veg">خضروات</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-primary" id="calcBtn"><i class="fas fa-calculator"></i> حساب دقيق</button>
+                    <button class="btn-secondary" id="saveBtn"><i class="fas fa-save"></i> حفظ النتيجة</button>
+                    <button class="btn-secondary" id="printBtn"><i class="fas fa-print"></i> طباعة</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card result-card">
+            <div class="card-header">
+                <i class="fas fa-chart-simple"></i> النتائج الاحترافية
+            </div>
+            <div class="card-body">
+                <div class="big-result" id="resultBox">
+                    <div class="label">التدفق المثالي لكل بخاخ</div>
+                    <div class="value" id="flowDisplay">—</div>
+                    <div class="sub">لتر / دقيقة (L/min)</div>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <small>التدفق الكلي للآلة</small>
+                        <strong id="totalFlowSpan">—</strong>
+                        <small>لتر/دقيقة</small>
+                    </div>
+                    <div class="info-item">
+                        <small>حجم الخزان المقدر (لـ 1 هكتار)</small>
+                        <strong id="tankEstimate">—</strong>
+                        <small>لتر/هكتار</small>
+                    </div>
+                </div>
+
+                <div id="stepByStep" class="equation-banner" style="background:#e9f3e6; text-align:right;">
+                    📐 اضغط على "حساب دقيق" لعرض الخطوات والنتيجة
+                </div>
+
+                <div id="customAdvice" class="equation-banner" style="background:#fff3db; margin-top:0.8rem;">
+                    <i class="fas fa-info-circle"></i> يرجى التأكد من استخدام بخاخات بنفس اللون والرؤية لضمان تجانس الرش.
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-history"></i> سجل العمليات
+            </div>
+            <div class="card-body">
+                <div id="historyList" class="history-log">
+                    <p style="color:#648a70;">✨ سيتم حفظ الحسابات بعد الضغط على "حفظ النتيجة"</p>
+                </div>
+                <button id="clearHistoryBtn" class="btn-secondary" style="width:100%; margin-top:12px;"><i class="fas fa-trash-alt"></i> مسح السجل</button>
+                <div class="equation-banner" style="margin-top:1rem;">
+                    <i class="fas fa-microscope"></i> المعادلة المعتمدة ISO: <strong>q = (R × S × W) / (600 × n)</strong><br>
+                    R: لتر/هكتار , S: كم/س , W: متر , n: عدد البخاخات
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // DOM elements
+    const mixInput = document.getElementById('mixLHa');
+    const speedInput = document.getElementById('speedKmh');
+    const widthInput = document.getElementById('widthM');
+    const nozzlesInput = document.getElementById('nozzlesNum');
+    const flowSpan = document.getElementById('flowDisplay');
+    const totalFlowSpan = document.getElementById('totalFlowSpan');
+    const tankEstimateSpan = document.getElementById('tankEstimate');
+    const stepDiv = document.getElementById('stepByStep');
+    const adviceDiv = document.getElementById('customAdvice');
+    const cropSelect = document.getElementById('cropType');
+    const historyDiv = document.getElementById('historyList');
+    const resultBox = document.getElementById('resultBox');
+
+    let historyArray = [];
+
+    // helpers
+    function getPosFloat(value, def=0) {
+        let v = parseFloat(value);
+        return (isNaN(v) || v<0) ? def : v;
+    }
+    function getPosInt(value, def=1) {
+        let v = parseInt(value,10);
+        return (isNaN(v) || v<=0) ? def : v;
+    }
+
+    // core formula
+    function computeFlow(mix, speed, width, nozzles) {
+        if(mix <= 0 || speed <= 0 || width <= 0 || nozzles <= 0) return 0;
+        const total = (mix * speed * width) / 600;
+        return total / nozzles;
+    }
+
+    // main calculation function (called ONLY when pressing the button)
+    function calculateAndDisplay() {
+        let mix = getPosFloat(mixInput.value);
+        let speed = getPosFloat(speedInput.value);
+        let width = getPosFloat(widthInput.value);
+        let nozzles = getPosInt(nozzlesInput.value);
+        
+        // check for empty/invalid
+        if(mixInput.value === "" || isNaN(parseFloat(mixInput.value))) mix = 0;
+        if(speedInput.value === "" || isNaN(parseFloat(speedInput.value))) speed = 0;
+        if(widthInput.value === "" || isNaN(parseFloat(widthInput.value))) width = 0;
+        
+        const flowPerNozzle = computeFlow(mix, speed, width, nozzles);
+        const totalFlow = (mix * speed * width) / 600;
+        
+        // update display
+        if(flowPerNozzle > 0 || (mix>0 && speed>0 && width>0 && nozzles>0)) {
+            flowSpan.innerText = flowPerNozzle.toFixed(2);
+            totalFlowSpan.innerText = totalFlow.toFixed(2);
+            if(mix>0) tankEstimateSpan.innerText = mix.toFixed(1) + " لتر/هكتار";
+            else tankEstimateSpan.innerText = "—";
+        } else {
+            flowSpan.innerText = "0.00";
+            totalFlowSpan.innerText = "0.00";
+            tankEstimateSpan.innerText = "—";
+        }
+        
+        // Step by step details in arabic (only when valid)
+        if(mix > 0 && speed > 0 && width > 0 && nozzles > 0) {
+            stepDiv.innerHTML = `
+                <i class="fas fa-calculator"></i> <strong>📐 خطوات الحساب (معادلة دقيقة):</strong><br>
+                • التدفق الكلي = (${mix.toFixed(2)} × ${speed.toFixed(2)} × ${width.toFixed(2)}) / 600 = ${totalFlow.toFixed(3)} لتر/دقيقة<br>
+                • التدفق لكل بخاخ = ${totalFlow.toFixed(3)} / ${nozzles} = <strong style="color:#0b5e34; font-size:1rem;">${flowPerNozzle.toFixed(3)} لتر/دقيقة</strong><br>
+                • الثابت 600: تحويل الوحدات (هكتار ← دقائق) وفق المنظمات الزراعية العالمية.
+            `;
+        } else {
+            stepDiv.innerHTML = `⚠️ قيمة غير صالحة: تأكد من أن جميع الحقول تحتوي على أرقام موجبة (كمية الخليط، السرعة، العرض، وعدد البخاخات أكبر من صفر).`;
+        }
+        
+        // smart recommendation with crop type
+        let cropMsg = "";
+        const crop = cropSelect.value;
+        if(crop === "fruit") cropMsg = "للأشجار المثمرة يفضل تدفق بين 0.8 - 2.2 لتر/دقيقة لكل بخاخ. ";
+        else if(crop === "veg") cropMsg = "للخضروات ينصح بتيار رش ناعم وتدفق 0.5 - 1.8 لتر/دقيقة. ";
+        else cropMsg = "للمحاصيل الحقلية يُفضل تدفق 1.0 - 2.5 لتر/دقيقة. ";
+        
+        let adviceText = "";
+        if(flowPerNozzle === 0 && (mix>0 && speed>0 && width>0 && nozzles>0)) {
+            adviceText = "⚠️ تحقق من القيم، النتيجة صفر رغم وجود بيانات إيجابية؟ تأكد من صحة الأرقام.";
+        } else if(flowPerNozzle < 0.4 && flowPerNozzle > 0) {
+            adviceText = "⚠️ التدفق منخفض جدًا، زِد السرعة أو غيّر الفتحات لتحسين التغطية.";
+        } else if(flowPerNozzle > 3.8) {
+            adviceText = "⚠️ تدفق مرتفع جداً، قد يؤدي للغسيل والتلوث. خفّض السرعة أو غيّر الفوهات.";
+        } else if(flowPerNozzle > 0) {
+            adviceText = "✅ التدفق مثالي ضمن النطاق المعياري للرش الزراعي الفعال.";
+        } else {
+            adviceText = "📝 أدخل قيماً صحيحة في جميع الحقول ثم اضغط 'حساب دقيق'.";
+        }
+        
+        adviceDiv.innerHTML = `<i class="fas fa-clipboard-list"></i> ${cropMsg} ${adviceText} <strong>يرجى التأكد من استخدام بخاخات بنفس اللون والرؤية الرش والمعايرة الدورية.</strong>`;
+        
+        // add animation on result box
+        resultBox.classList.add('result-animate');
+        setTimeout(() => {
+            resultBox.classList.remove('result-animate');
+        }, 500);
+        
+        return {mix, speed, width, nozzles, flowPerNozzle, totalFlow};
+    }
+    
+    // save current calculation to history (uses last calculated values from inputs directly)
+    function saveCurrentToHistory() {
+        let mix = getPosFloat(mixInput.value);
+        let speed = getPosFloat(speedInput.value);
+        let width = getPosFloat(widthInput.value);
+        let nozzles = getPosInt(nozzlesInput.value);
+        let flow = computeFlow(mix, speed, width, nozzles);
+        
+        if(mix === 0 || speed === 0 || width === 0 || nozzles === 0 || flow === 0) {
+            alert("⚠️ لا يمكن حفظ النتيجة: تأكد من إدخال بيانات صحيحة واضغط 'حساب دقيق' أولاً، وتأكد من أن التدفق أكبر من صفر.");
+            return;
+        }
+        
+        const timestamp = new Date().toLocaleTimeString('ar-EG');
+        const historyEntry = `🕒 ${timestamp} | خليط:${mix.toFixed(1)} ل/هـ | سرعة:${speed.toFixed(1)} كم/س | عرض:${width.toFixed(1)}م | بخاخات:${nozzles}  →  التدفق: ${flow.toFixed(2)} لتر/دقيقة`;
+        historyArray.unshift(historyEntry);
+        if(historyArray.length > 6) historyArray.pop();
+        renderHistory();
+    }
+    
+    function renderHistory() {
+        if(historyArray.length === 0) {
+            historyDiv.innerHTML = `<p style="color:#648a70;">📋 لا توجد حسابات محفوظة. اضغط "حفظ النتيجة" بعد الحساب.</p>`;
+            return;
+        }
+        let html = '';
+        historyArray.forEach(entry => {
+            html += `<p><i class="fas fa-bookmark" style="color:#3b8a5a;"></i> ${entry}</p>`;
+        });
+        historyDiv.innerHTML = html;
+    }
+    
+    function clearHistory() {
+        historyArray = [];
+        renderHistory();
+    }
+    
+    function printSummary() {
+        let mix = getPosFloat(mixInput.value);
+        let speed = getPosFloat(speedInput.value);
+        let width = getPosFloat(widthInput.value);
+        let nozzles = getPosInt(nozzlesInput.value);
+        let flow = computeFlow(mix, speed, width, nozzles);
+        const total = (mix * speed * width) / 600;
+        
+        if(mix === 0 || speed === 0 || width === 0 || nozzles === 0) {
+            alert("لا يمكن الطباعة: أدخل بيانات صحيحة واضغط 'حساب دقيق' أولاً.");
+            return;
+        }
+        
+        const printContent = `
+            <html dir="rtl"><head><title>تقرير حاسبة رش المبيدات</title>
+            <style>body{font-family:Cairo; padding:2rem;} h2{color:#1f543b;} table{border-collapse:collapse; width:100%;} td,th{padding:8px; border-bottom:1px solid #ddd;}</style>
+            </head><body>
+            <h2><i class="fas fa-tractor"></i> تقرير معايرة البخاخات - دقيق</h2>
+            <hr/>
+            <table>
+            <tr><td><strong>كمية الخليط:</strong></td><td>${mix.toFixed(2)} لتر/هكتار</td></tr>
+            <tr><td><strong>سرعة الجرار:</strong></td><td>${speed.toFixed(2)} كم/ساعة</td></tr>
+            <tr><td><strong>عرض العمل:</strong></td><td>${width.toFixed(2)} متر</td></tr>
+            <tr><td><strong>عدد البخاخات:</strong></td><td>${nozzles}</td></tr>
+            <tr><td><strong>💧 التدفق لكل بخاخ:</strong></td><td><strong style="color:#0b5e34;">${flow.toFixed(2)} لتر/دقيقة</strong></td></tr>
+            <tr><td><strong>التدفق الكلي للآلة:</strong></td><td>${total.toFixed(2)} لتر/دقيقة</td></tr>
+            </table>
+            <hr/>
+            <p>✅ تأكد من استخدام بخاخات بنفس اللون والرؤية ومعايرة دورية.</p>
+            <p>📅 تاريخ التقرير: ${new Date().toLocaleString('ar-EG')}</p>
+            <p style="font-size:12px;">المعادلة: q = (R × S × W) / (600 × n)</p>
+            </body></html>
+        `;
+        const win = window.open();
+        win.document.write(printContent);
+        win.document.close();
+        win.print();
+    }
+    
+    // Event binding: ONLY "حساب دقيق" button triggers the calculation
+    function bindEvents() {
+        const calcButton = document.getElementById('calcBtn');
+        calcButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            calculateAndDisplay();
+        });
+        
+        document.getElementById('saveBtn').addEventListener('click', saveCurrentToHistory);
+        document.getElementById('printBtn').addEventListener('click', printSummary);
+        document.getElementById('clearHistoryBtn').addEventListener('click', clearHistory);
+        
+        // Optional: pressing Enter in any input triggers calc? We'll keep it manual but smooth.
+        const inputs = [mixInput, speedInput, widthInput, nozzlesInput];
+        inputs.forEach(inp => {
+            inp.addEventListener('keypress', (e) => {
+                if(e.key === 'Enter') {
+                    e.preventDefault();
+                    calculateAndDisplay();
+                }
+            });
+        });
+    }
+    
+    // initial state: show placeholder, no automatic calculation
+    function init() {
+        bindEvents();
+        // set initial empty state without auto calculation
+        flowSpan.innerText = "—";
+        totalFlowSpan.innerText = "—";
+        tankEstimateSpan.innerText = "—";
+        stepDiv.innerHTML = "📐 اضغط على زر <strong>'حساب دقيق'</strong> لعرض الخطوات والنتيجة بناءً على المعادلة الزراعية الدقيقة.";
+    }
+    
+    init();
+</script>
+</body>
+</html>
